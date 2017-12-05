@@ -14,4 +14,10 @@ trait HasAttributes
     {
         return $this->dates;
     }
+
+    public function getCasts(): array
+    {
+        return $this->casts;
+    }
+
 }

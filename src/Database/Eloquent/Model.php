@@ -10,6 +10,7 @@ use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Database\ConnectionResolverInterface as Resolver;
 use Illuminate\Database\Eloquent\Concerns\GuardsAttributes;
 use Illuminate\Database\Eloquent\Concerns\HasEvents;
+use Illuminate\Database\Eloquent\Concerns\HasRelationships;
 use Illuminate\Database\Eloquent\Concerns\HidesAttributes;
 use Illuminate\Database\Eloquent\JsonEncodingException;
 use Illuminate\Database\Eloquent\MassAssignmentException;
@@ -24,6 +25,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
 {
     use Concerns\HasAttributes,
         HasEvents,
+        HasRelationships,
         HidesAttributes,
         GuardsAttributes;
 
@@ -49,7 +51,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     protected $primaryKey = 'id';
 
     /**
-     * The "type" of the auto-incrementing ID.
+     * The "type" of primary key.
      *
      * @var string
      */
@@ -117,11 +119,6 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
         $this->syncOriginal();
 
         $this->fill($attributes);
-    }
-
-    public function getIncrementing()
-    {
-        return false;
     }
 
     /**
@@ -276,14 +273,11 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Get all of the models from the database.
      *
-     * @param  array|mixed $columns
      * @return Collection|static[]
      */
-    public static function all($columns = ['*'])
+    public static function all()
     {
-        return (new static)->newQuery()->get(
-            is_array($columns) ? $columns : func_get_args()
-        );
+        return (new static)->newQuery()->get();
     }
 
     /**
@@ -320,7 +314,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
             ->with($this->with);
     }
 
-    public function newQueryWithoutScope($scope)
+    public function newQueryWithoutScope()
     {
         return $this->newQuery();
     }
