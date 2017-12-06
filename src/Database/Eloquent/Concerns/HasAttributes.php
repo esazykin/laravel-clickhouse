@@ -10,7 +10,7 @@ trait HasAttributes
 {
     use BaseHasAttributes;
 
-    public function getDates()
+    public function getDates(): array
     {
         return $this->dates;
     }
@@ -20,4 +20,8 @@ trait HasAttributes
         return $this->casts;
     }
 
+    protected function getDateFormat(): string
+    {
+        return $this->dateFormat ?? 'Y-m-d H:i:s';
+    }
 }

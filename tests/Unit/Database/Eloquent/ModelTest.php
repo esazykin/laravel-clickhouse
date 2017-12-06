@@ -9,6 +9,7 @@ use Esazykin\LaravelClickHouse\Tests\EloquentModelTest;
 use Esazykin\LaravelClickHouse\Tests\EloquentModelWithTest;
 use Esazykin\LaravelClickHouse\Tests\Helpers;
 use Illuminate\Database\Eloquent\MassAssignmentException;
+use Illuminate\Support\Carbon;
 use PHPUnit\Framework\TestCase;
 
 class ModelTest extends TestCase
@@ -77,5 +78,15 @@ class ModelTest extends TestCase
     {
         $result = EloquentModelWithTest::with('foo', 'bar');
         $this->assertEquals('foo', $result);
+    }
+
+    public function testTimestampsAreReturnedAsObjectsFromPlainDatesAndTimestamps()
+    {
+        $datetime = '2012-12-04';
+        $model = new EloquentModelCastingTest();
+        $model->payed_at = $datetime;
+
+        $this->assertInstanceOf(Carbon::class, $model->payed_at);
+        $this->assertSame($datetime . ' 00:00:00', $model->payed_at->toDateTimeString());
     }
 }

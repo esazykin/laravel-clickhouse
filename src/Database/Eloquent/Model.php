@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Esazykin\LaravelClickHouse\Database\Eloquent;
 
 use ArrayAccess;
@@ -7,6 +9,7 @@ use Esazykin\LaravelClickHouse\Database\Connection;
 use Esazykin\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\ConnectionResolverInterface as Resolver;
 use Illuminate\Database\Eloquent\Concerns\GuardsAttributes;
 use Illuminate\Database\Eloquent\Concerns\HasEvents;
@@ -319,21 +322,6 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
         return $this->newQuery();
     }
 
-    /**
-     * Get a new query to restore one or more models by their queueable IDs.
-     *
-     * @param  array|int $ids
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function newQueryForRestoration($ids)
-    {
-        if (is_array($ids)) {
-            return $this->newQueryWithoutScopes()->whereIn($this->getQualifiedKeyName(), $ids);
-        } else {
-            return $this->newQueryWithoutScopes()->whereKey($ids);
-        }
-    }
-
     public function newEloquentBuilder(QueryBuilder $query): Builder
     {
         return new Builder($query);
@@ -363,7 +351,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return $this->attributesToArray();
     }
@@ -376,7 +364,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      *
      * @throws \Illuminate\Database\Eloquent\JsonEncodingException
      */
-    public function toJson($options = 0)
+    public function toJson($options = 0): string
     {
         $json = json_encode($this->jsonSerialize(), $options);
 
@@ -392,34 +380,9 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->toArray();
-    }
-
-    /**
-     * Determine if two models have the same ID and belong to the same table.
-     *
-     * @param  \Illuminate\Database\Eloquent\Model|null $model
-     * @return bool
-     */
-    public function is($model)
-    {
-        return !is_null($model) &&
-            $this->getKey() === $model->getKey() &&
-            $this->getTable() === $model->getTable() &&
-            $this->getConnectionName() === $model->getConnectionName();
-    }
-
-    /**
-     * Determine if two models are not the same.
-     *
-     * @param  \Illuminate\Database\Eloquent\Model|null $model
-     * @return bool
-     */
-    public function isNot($model)
-    {
-        return !$this->is($model);
     }
 
     /**
@@ -448,7 +411,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      * @param  string $name
      * @return $this
      */
-    public function setConnection($name)
+    public function setConnection(string $name)
     {
         $this->connection = $name;
 
@@ -461,7 +424,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      * @param  string|null $connection
      * @return Connection|\Illuminate\Database\ConnectionInterface
      */
-    public static function resolveConnection($connection = null)
+    public static function resolveConnection(string $connection = null)
     {
         return static::$resolver->connection($connection);
     }
@@ -469,9 +432,9 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Get the connection resolver instance.
      *
-     * @return \Illuminate\Database\ConnectionResolverInterface
+     * @return ConnectionResolverInterface
      */
-    public static function getConnectionResolver()
+    public static function getConnectionResolver(): ConnectionResolverInterface
     {
         return static::$resolver;
     }
@@ -482,7 +445,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      * @param  \Illuminate\Database\ConnectionResolverInterface $resolver
      * @return void
      */
-    public static function setConnectionResolver(Resolver $resolver)
+    public static function setConnectionResolver(Resolver $resolver): void
     {
         static::$resolver = $resolver;
     }
@@ -492,7 +455,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      *
      * @return string
      */
-    public function getTable()
+    public function getTable(): string
     {
         if (!isset($this->table)) {
             $this->setTable(str_replace(
@@ -509,7 +472,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      * @param  string $table
      * @return $this
      */
-    public function setTable($table)
+    public function setTable(string $table): self
     {
         $this->table = $table;
 
@@ -521,7 +484,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      *
      * @return string
      */
-    public function getKeyName()
+    public function getKeyName(): string
     {
         return $this->primaryKey;
     }
@@ -532,7 +495,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      * @param  string $key
      * @return $this
      */
-    public function setKeyName($key)
+    public function setKeyName(string $key): self
     {
         $this->primaryKey = $key;
 
@@ -544,17 +507,17 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      *
      * @return string
      */
-    public function getQualifiedKeyName()
+    public function getQualifiedKeyName(): string
     {
         return $this->getTable() . '.' . $this->getKeyName();
     }
 
     /**
-     * Get the auto-incrementing key type.
+     * Get the pk key type.
      *
      * @return string
      */
-    public function getKeyType()
+    public function getKeyType(): string
     {
         return $this->keyType;
     }
@@ -565,7 +528,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      * @param  string $type
      * @return $this
      */
-    public function setKeyType($type)
+    public function setKeyType(string $type)
     {
         $this->keyType = $type;
 
@@ -588,7 +551,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      *
      * @return string
      */
-    public function getForeignKey()
+    public function getForeignKey(): string
     {
         return Str::snake(class_basename($this)) . '_' . $this->primaryKey;
     }
@@ -598,7 +561,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      *
      * @return int
      */
-    public function getPerPage()
+    public function getPerPage(): int
     {
         return $this->perPage;
     }
@@ -609,7 +572,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      * @param  int $perPage
      * @return $this
      */
-    public function setPerPage($perPage)
+    public function setPerPage(int $perPage): self
     {
         $this->perPage = $perPage;
 
@@ -645,9 +608,9 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      * @param  mixed $offset
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
-        return !is_null($this->getAttribute($offset));
+        return $this->getAttribute($offset) !== null;
     }
 
     /**
@@ -668,7 +631,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      * @param  mixed $value
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->setAttribute($offset, $value);
     }
@@ -679,7 +642,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      * @param  mixed $offset
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->attributes[$offset]);
     }

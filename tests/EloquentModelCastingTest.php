@@ -6,6 +6,8 @@ namespace Esazykin\LaravelClickHouse\Tests;
 
 class EloquentModelCastingTest extends EloquentModelTest
 {
+    use Helpers;
+
     protected $casts = [
         'intAttribute' => 'int',
         'floatAttribute' => 'float',
@@ -20,9 +22,12 @@ class EloquentModelCastingTest extends EloquentModelTest
         'timestampAttribute' => 'timestamp',
     ];
 
+    protected $dates = [
+        'payed_at',
+    ];
+
     public function jsonAttributeValue()
     {
         return $this->attributes['jsonAttribute'];
     }
-
 }
