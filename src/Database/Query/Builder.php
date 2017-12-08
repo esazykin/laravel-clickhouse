@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Esazykin\LaravelClickHouse\Database\Query;
 
-use Esazykin\LaravelClickHouse\Database\Connection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Traits\Macroable;
 use Tinderbox\Clickhouse\Common\Format;
-use Tinderbox\ClickhouseBuilder\Query\BaseBuilder;
+use Illuminate\Support\Traits\Macroable;
 use Tinderbox\ClickhouseBuilder\Query\Grammar;
+use Tinderbox\ClickhouseBuilder\Query\BaseBuilder;
+use Esazykin\LaravelClickHouse\Database\Connection;
 
 class Builder extends BaseBuilder
 {
@@ -65,11 +65,11 @@ class Builder extends BaseBuilder
             return count($result);
         }
 
-        return (int)($result[0]['count'] ?? 0);
+        return (int) ($result[0]['count'] ?? 0);
     }
 
     /**
-     * Perform query and get first row
+     * Perform query and get first row.
      *
      * @throws \Tinderbox\Clickhouse\Exceptions\ClientException
      *
@@ -85,7 +85,7 @@ class Builder extends BaseBuilder
      *
      * @return self
      */
-    public function newQuery(): Builder
+    public function newQuery(): self
     {
         return new static($this->connection, $this->grammar);
     }
@@ -105,7 +105,7 @@ class Builder extends BaseBuilder
     public function insertFiles(array $columns, array $files, string $format = Format::CSV, int $concurrency = 5): array
     {
         return $this->connection->insertFiles(
-            (string)$this->getFrom()->getTable(),
+            (string) $this->getFrom()->getTable(),
             $columns,
             $files,
             $format,

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Esazykin\LaravelClickHouse\Tests;
 
-use Esazykin\LaravelClickHouse\Database\Eloquent\Builder;
 use Mockery\MockInterface;
+use Esazykin\LaravelClickHouse\Database\Eloquent\Builder;
 
 class EloquentModelWithTest extends EloquentModelTest
 {
@@ -21,6 +21,7 @@ class EloquentModelWithTest extends EloquentModelTest
             ->once()
             ->with(['foo', 'bar'])
             ->andReturn('foo');
+
         return $builder;
     }
 }

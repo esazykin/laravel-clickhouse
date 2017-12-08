@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Esazykin\LaravelClickHouse\Tests\Unit\Database\Eloquent;
 
-use Esazykin\LaravelClickHouse\Tests\EloquentModelCastingTest;
-use Esazykin\LaravelClickHouse\Tests\EloquentModelTest;
-use Esazykin\LaravelClickHouse\Tests\EloquentModelWithTest;
-use Esazykin\LaravelClickHouse\Tests\Helpers;
-use Illuminate\Database\Eloquent\MassAssignmentException;
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\TestCase;
+use Esazykin\LaravelClickHouse\Tests\Helpers;
+use Esazykin\LaravelClickHouse\Tests\EloquentModelTest;
+use Illuminate\Database\Eloquent\MassAssignmentException;
+use Esazykin\LaravelClickHouse\Tests\EloquentModelWithTest;
+use Esazykin\LaravelClickHouse\Tests\EloquentModelCastingTest;
 
 class ModelTest extends TestCase
 {
@@ -87,6 +87,6 @@ class ModelTest extends TestCase
         $model->payed_at = $datetime;
 
         $this->assertInstanceOf(Carbon::class, $model->payed_at);
-        $this->assertSame($datetime . ' 00:00:00', $model->payed_at->toDateTimeString());
+        $this->assertSame($datetime.' 00:00:00', $model->payed_at->toDateTimeString());
     }
 }
