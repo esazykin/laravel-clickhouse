@@ -87,17 +87,6 @@ class Builder
     }
 
     /**
-     * Create and return an un-saved model instance.
-     *
-     * @param  array $attributes
-     * @return \Esazykin\LaravelClickHouse\Database\Eloquent\Model
-     */
-    public function make(array $attributes = [])
-    {
-        return $this->newModelInstance($attributes);
-    }
-
-    /**
      * Add a where clause on the primary key to the query.
      *
      * @param  mixed $id
@@ -207,7 +196,7 @@ class Builder
     public function find($id, $columns = ['*'])
     {
         if (is_array($id) || $id instanceof Arrayable) {
-            return $this->findMany($id, $columns);
+            return $this->findMany($id);
         }
 
         return $this->whereKey($id)->first($columns);
@@ -217,16 +206,15 @@ class Builder
      * Find multiple models by their primary keys.
      *
      * @param  \Illuminate\Contracts\Support\Arrayable|array $ids
-     * @param  array $columns
      * @return Collection
      */
-    public function findMany($ids, $columns = ['*'])
+    public function findMany($ids): Collection
     {
-        if (empty($ids)) {
+        if (count($ids) < 1) {
             return $this->model->newCollection();
         }
 
-        return $this->whereKey($ids)->get($columns);
+        return $this->whereKey($ids)->get();
     }
 
     /**
@@ -238,7 +226,7 @@ class Builder
      *
      * @throws ModelNotFoundException
      */
-    public function findOrFail($id, $columns = ['*'])
+    public function findOrFail($id, array $columns = ['*'])
     {
         $result = $this->find($id, $columns);
 
@@ -265,7 +253,8 @@ class Builder
      */
     public function firstOrFail($columns = ['*'])
     {
-        if (!is_null($model = $this->first($columns))) {
+        $model = $this->first($columns);
+        if ($model !== null) {
             return $model;
         }
 
@@ -312,9 +301,8 @@ class Builder
      */
     public function getModels(): array
     {
-        return $this->hydrate(
-            $this->query->get()->all()
-        )->all();
+        $result = $this->query->get()->all();
+        return $this->hydrate($result)->all();
     }
 
     /**
