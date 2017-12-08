@@ -5,21 +5,21 @@ declare(strict_types=1);
 namespace Esazykin\LaravelClickHouse\Database\Eloquent;
 
 use ArrayAccess;
-use Esazykin\LaravelClickHouse\Database\Connection;
-use Esazykin\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
-use Illuminate\Contracts\Support\Arrayable;
+use JsonSerializable;
+use Illuminate\Support\Str;
 use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Contracts\Support\Arrayable;
+use Tinderbox\ClickhouseBuilder\Query\Grammar;
+use Esazykin\LaravelClickHouse\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
-use Illuminate\Database\ConnectionResolverInterface as Resolver;
-use Illuminate\Database\Eloquent\Concerns\GuardsAttributes;
 use Illuminate\Database\Eloquent\Concerns\HasEvents;
-use Illuminate\Database\Eloquent\Concerns\HasRelationships;
-use Illuminate\Database\Eloquent\Concerns\HidesAttributes;
 use Illuminate\Database\Eloquent\JsonEncodingException;
 use Illuminate\Database\Eloquent\MassAssignmentException;
-use Illuminate\Support\Str;
-use JsonSerializable;
-use Tinderbox\ClickhouseBuilder\Query\Grammar;
+use Illuminate\Database\Eloquent\Concerns\HidesAttributes;
+use Illuminate\Database\Eloquent\Concerns\GuardsAttributes;
+use Illuminate\Database\Eloquent\Concerns\HasRelationships;
+use Illuminate\Database\ConnectionResolverInterface as Resolver;
+use Esazykin\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
 
 /**
  * @mixin \Eloquent
@@ -162,7 +162,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
         $class = static::class;
 
         foreach (class_uses_recursive($class) as $trait) {
-            if (method_exists($class, $method = 'boot' . class_basename($trait))) {
+            if (method_exists($class, $method = 'boot'.class_basename($trait))) {
                 forward_static_call([$class, $method]);
             }
         }
@@ -242,7 +242,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
         // This method just provides a convenient way for us to generate fresh model
         // instances of this current model. It is particularly useful during the
         // hydration of new objects via the Eloquent query builder instances.
-        $model = new static((array)$attributes);
+        $model = new static((array) $attributes);
 
         $model->exists = $exists;
 
@@ -509,7 +509,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      */
     public function getQualifiedKeyName(): string
     {
-        return $this->getTable() . '.' . $this->getKeyName();
+        return $this->getTable().'.'.$this->getKeyName();
     }
 
     /**
@@ -545,7 +545,6 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
         return $this->getAttribute($this->getKeyName());
     }
 
-
     /**
      * Get the default foreign key name for the model.
      *
@@ -553,7 +552,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      */
     public function getForeignKey(): string
     {
-        return Str::snake(class_basename($this)) . '_' . $this->primaryKey;
+        return Str::snake(class_basename($this)).'_'.$this->primaryKey;
     }
 
     /**

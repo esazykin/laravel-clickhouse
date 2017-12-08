@@ -2,17 +2,17 @@
 
 namespace Esazykin\LaravelClickHouse\Database\Eloquent;
 
-use BadMethodCallException;
 use Closure;
-use Esazykin\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Database\Concerns\BuildsQueries;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\Eloquent\RelationNotFoundException;
-use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Pagination\Paginator;
+use BadMethodCallException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Database\Concerns\BuildsQueries;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\RelationNotFoundException;
+use Esazykin\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
 
 /**
  * @mixin QueryBuilder
@@ -302,6 +302,7 @@ class Builder
     public function getModels(): array
     {
         $result = $this->query->get()->all();
+
         return $this->hydrate($result)->all();
     }
 
@@ -399,7 +400,7 @@ class Builder
         // that start with the given top relations and adds them to our arrays.
         foreach ($this->eagerLoad as $name => $constraints) {
             if ($this->isNestedUnder($relation, $name)) {
-                $nested[substr($name, strlen($relation . '.'))] = $constraints;
+                $nested[substr($name, strlen($relation.'.'))] = $constraints;
             }
         }
 
@@ -415,7 +416,7 @@ class Builder
      */
     protected function isNestedUnder($relation, $name)
     {
-        return Str::contains($name, '.') && Str::startsWith($name, $relation . '.');
+        return Str::contains($name, '.') && Str::startsWith($name, $relation.'.');
     }
 
     /**
@@ -564,8 +565,8 @@ class Builder
             // care of grouping the "wheres" properly so the logical order doesn't get
             // messed up when adding scopes. Then we'll return back out the builder.
             $builder = $builder->callScope(
-                [$this->model, 'scope' . ucfirst($scope)],
-                (array)$parameters
+                [$this->model, 'scope'.ucfirst($scope)],
+                (array) $parameters
             );
         }
 
@@ -631,7 +632,7 @@ class Builder
 
         $result = $scope(...array_values($parameters)) ?? $this;
 
-        if (count((array)$query->getWheres()) > $originalWhereCount) {
+        if (count((array) $query->getWheres()) > $originalWhereCount) {
             $this->addNewWheresWithinGroup($query, $originalWhereCount);
         }
 
@@ -768,7 +769,7 @@ class Builder
                         $name,
                         function () {
                             //
-                        }
+                        },
                     ];
             }
 
@@ -795,7 +796,7 @@ class Builder
             explode(':', $name)[0],
             function ($query) use ($name) {
                 $query->select(explode(',', explode(':', $name)[1]));
-            }
+            },
         ];
     }
 
@@ -925,7 +926,7 @@ class Builder
             return call_user_func_array(static::$macros[$method], $parameters);
         }
 
-        if (method_exists($this->model, $scope = 'scope' . ucfirst($method))) {
+        if (method_exists($this->model, $scope = 'scope'.ucfirst($method))) {
             return $this->callScope([$this->model, $scope], $parameters);
         }
 

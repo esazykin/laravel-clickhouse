@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Esazykin\LaravelClickHouse\Tests\Unit\Database\Query;
 
-use Esazykin\LaravelClickHouse\Database\Connection;
-use Esazykin\LaravelClickHouse\Database\Query\Builder;
-use Esazykin\LaravelClickHouse\Tests\Helpers;
 use PHPUnit\Framework\TestCase;
-use Tinderbox\ClickhouseBuilder\Query\Enums\Format;
+use Esazykin\LaravelClickHouse\Tests\Helpers;
 use Tinderbox\ClickhouseBuilder\Query\Grammar;
+use Esazykin\LaravelClickHouse\Database\Connection;
+use Tinderbox\ClickhouseBuilder\Query\Enums\Format;
+use Esazykin\LaravelClickHouse\Database\Query\Builder;
 
 /**
  * @property \Mockery\MockInterface|Connection connection
@@ -82,7 +82,7 @@ class BuilderTest extends TestCase
             ->shouldReceive('insertFiles')
             ->andReturn([]);
 
-        $builderResult = $this->builder->insertFiles(['column_1', 'column_2',], []);
+        $builderResult = $this->builder->insertFiles(['column_1', 'column_2'], []);
         $this->assertSame([], $builderResult);
     }
 
@@ -115,7 +115,7 @@ class BuilderTest extends TestCase
             ->shouldReceive('insert')
             ->withArgs([
                 $generatedSql,
-                collect($insertedRow)->values()->toArray()
+                collect($insertedRow)->values()->toArray(),
             ])
             ->andReturn(true);
 

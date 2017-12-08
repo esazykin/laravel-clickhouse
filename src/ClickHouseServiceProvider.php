@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Esazykin\LaravelClickHouse;
 
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\DatabaseManager;
 use Esazykin\LaravelClickHouse\Database\Connection;
 use Esazykin\LaravelClickHouse\Database\Eloquent\Model;
-use Illuminate\Database\DatabaseManager;
-use Illuminate\Support\ServiceProvider;
 
 class ClickHouseServiceProvider extends ServiceProvider
 {

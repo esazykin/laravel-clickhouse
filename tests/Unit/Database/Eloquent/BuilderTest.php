@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Esazykin\LaravelClickHouse\Tests\Unit\Database\Eloquent;
 
-use Esazykin\LaravelClickHouse\Database\Connection;
-use Esazykin\LaravelClickHouse\Database\Eloquent\Builder;
-use Esazykin\LaravelClickHouse\Database\Eloquent\Collection;
-use Esazykin\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
-use Esazykin\LaravelClickHouse\Tests\EloquentModelCastingTest;
-use Esazykin\LaravelClickHouse\Tests\Helpers;
 use Mockery\Mock;
 use PHPUnit\Framework\TestCase;
-use Tinderbox\ClickhouseBuilder\Query\Enums\Operator;
+use Esazykin\LaravelClickHouse\Tests\Helpers;
 use Tinderbox\ClickhouseBuilder\Query\Grammar;
 use Tinderbox\ClickhouseBuilder\Query\Identifier;
+use Esazykin\LaravelClickHouse\Database\Connection;
+use Tinderbox\ClickhouseBuilder\Query\Enums\Operator;
+use Esazykin\LaravelClickHouse\Database\Eloquent\Builder;
+use Esazykin\LaravelClickHouse\Database\Eloquent\Collection;
+use Esazykin\LaravelClickHouse\Tests\EloquentModelCastingTest;
 use Tinderbox\ClickhouseBuilder\Query\TwoElementsLogicExpression;
+use Esazykin\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
 
 /**
  * @property Mock|Connection connection
@@ -53,7 +53,7 @@ class BuilderTest extends TestCase
         /** @var Identifier $first */
         $first = $expression->getFirstElement();
         $this->assertInstanceOf(Identifier::class, $first);
-        $this->assertSame($this->model->getTable() . '.' . $this->model->getKeyName(), (string)$first);
+        $this->assertSame($this->model->getTable().'.'.$this->model->getKeyName(), (string) $first);
         $this->assertSame($id, $expression->getSecondElement());
         $operator = $expression->getOperator();
         $this->assertInstanceOf(Operator::class, $operator);
@@ -64,8 +64,8 @@ class BuilderTest extends TestCase
     {
         $connectionResultRow = [
             'id' => $this->faker()->randomDigit,
-            'intAttribute' => (string)$this->faker()->randomDigit,
-            'floatAttribute' => (string)$this->faker()->randomFloat(2),
+            'intAttribute' => (string) $this->faker()->randomDigit,
+            'floatAttribute' => (string) $this->faker()->randomFloat(2),
             'stringAttribute' => $this->faker()->randomDigit,
             'boolAttribute' => 1,
             'booleanAttribute' => 1,
@@ -96,9 +96,9 @@ class BuilderTest extends TestCase
 
         $retrievedModel = $collection[0];
         $this->assertSame($connectionResultRow['id'], $retrievedModel->id);
-        $this->assertSame((int)$connectionResultRow['intAttribute'], $retrievedModel->intAttribute);
-        $this->assertSame((float)$connectionResultRow['floatAttribute'], $retrievedModel->floatAttribute);
-        $this->assertSame((string)$connectionResultRow['stringAttribute'], $retrievedModel->stringAttribute);
+        $this->assertSame((int) $connectionResultRow['intAttribute'], $retrievedModel->intAttribute);
+        $this->assertSame((float) $connectionResultRow['floatAttribute'], $retrievedModel->floatAttribute);
+        $this->assertSame((string) $connectionResultRow['stringAttribute'], $retrievedModel->stringAttribute);
         $this->assertTrue($retrievedModel->boolAttribute);
         $this->assertTrue($retrievedModel->booleanAttribute);
         $this->assertEquals(json_decode($connectionResultRow['objectAttribute']), $retrievedModel->objectAttribute);

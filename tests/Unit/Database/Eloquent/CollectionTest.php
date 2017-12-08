@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Esazykin\LaravelClickHouse\Tests\Unit\Database\Eloquent;
 
+use Mockery\Mock;
+use PHPUnit\Framework\TestCase;
+use Illuminate\Database\DatabaseManager;
+use Esazykin\LaravelClickHouse\Tests\Helpers;
 use Esazykin\LaravelClickHouse\Database\Connection;
 use Esazykin\LaravelClickHouse\Database\Eloquent\Collection;
 use Esazykin\LaravelClickHouse\Tests\EloquentModelCastingTest;
-use Esazykin\LaravelClickHouse\Tests\Helpers;
-use Illuminate\Database\DatabaseManager;
-use Mockery\Mock;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @property Mock|Connection connection
@@ -37,7 +37,6 @@ class CollectionTest extends TestCase
         EloquentModelCastingTest::setConnectionResolver($resolver);
     }
 
-
     public function testGet()
     {
         $connectionResult = collect()
@@ -63,7 +62,8 @@ class CollectionTest extends TestCase
         $this->assertSame(
             $connectionResult
                 ->map(function (array $row) {
-                    $row['floatAttribute'] = (float)$row['floatAttribute'];
+                    $row['floatAttribute'] = (float) $row['floatAttribute'];
+
                     return $row;
                 })
                 ->toArray(),
