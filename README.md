@@ -1,6 +1,7 @@
 # laravel-clickhouse
 [![Build Status](https://travis-ci.org/esazykin/laravel-clickhouse.svg?branch=master)](https://travis-ci.org/esazykin/laravel-clickhouse)
 [![StyleCI](https://styleci.io/repos/112756298/shield?branch=master)](https://styleci.io/repos/112756298)
+[![Coverage Status](https://coveralls.io/repos/github/esazykin/laravel-clickhouse/badge.svg?branch=master)](https://coveralls.io/github/esazykin/laravel-clickhouse?branch=master)
 
 Eloquent model for ClickHouse
 
