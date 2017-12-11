@@ -4,13 +4,13 @@ php:
   - 7.1
 
 before_install:
-  - composer require satooshi/php-coveralls:dev-master
+  - composer require php-coveralls/php-coveralls
 
 before_script:
   - composer self-update
   - composer install --prefer-source --dev
 
-script: phpunit --coverage-clover ./tests/logs/clover.xml
+script: vendor/bin/phpunit --coverage-clover ./tests/logs/clover.xml
 
 after_script:
- - php vendor/bin/coveralls -v
+ - php vendor/bin/php-coveralls -v
