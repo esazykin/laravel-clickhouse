@@ -3,14 +3,19 @@ language: php
 php:
   - 7.1
 
-sudo: false
-
 cache:
   directories:
   - vendor
   - $HOME/.composer/cache
 
+before_install:
+  - composer require satooshi/php-coveralls:dev-master
+
 before_script:
   - composer install --prefer-dist --no-interaction
+
 script:
-  - composer test
+  - phpunit --coverage-clover ./tests/logs/clover.xml
+
+after_script:
+ - php vendor/bin/coveralls -v
