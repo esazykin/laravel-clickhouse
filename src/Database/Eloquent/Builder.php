@@ -129,14 +129,13 @@ class Builder
      * @param  string $boolean
      * @return $this
      */
-    public function where($column, $operator = null, $value = null, $boolean = 'and')
+    public function where($column, $operator = null, $value = null, string $boolean = 'and'): self
     {
         if ($column instanceof Closure) {
-            $query = $this->model->newQueryWithoutScopes();
-
-            $column($query);
-
-            $this->query->addNestedWhereQuery($query->getQuery(), $boolean);
+            $this->query->where(function (QueryBuilder $queryBuilder) use ($column) {
+                $eloquentBuilder = $this->model->newEloquentBuilder($queryBuilder);
+                $column($eloquentBuilder);
+            });
         } else {
             $this->query->where(...func_get_args());
         }

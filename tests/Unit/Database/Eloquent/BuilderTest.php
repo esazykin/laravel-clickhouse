@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace Esazykin\LaravelClickHouse\Tests\Unit\Database\Eloquent;
 
-use Mockery\Mock;
-use PHPUnit\Framework\TestCase;
-use Esazykin\LaravelClickHouse\Tests\Helpers;
-use Tinderbox\ClickhouseBuilder\Query\Grammar;
-use Tinderbox\ClickhouseBuilder\Query\Identifier;
 use Esazykin\LaravelClickHouse\Database\Connection;
-use Tinderbox\ClickhouseBuilder\Query\Enums\Operator;
 use Esazykin\LaravelClickHouse\Database\Eloquent\Builder;
 use Esazykin\LaravelClickHouse\Database\Eloquent\Collection;
-use Esazykin\LaravelClickHouse\Tests\EloquentModelCastingTest;
-use Tinderbox\ClickhouseBuilder\Query\TwoElementsLogicExpression;
 use Esazykin\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
+use Esazykin\LaravelClickHouse\Tests\EloquentModelCastingTest;
+use Esazykin\LaravelClickHouse\Tests\Helpers;
+use Illuminate\Database\DatabaseManager;
+use Mockery\Mock;
+use PHPUnit\Framework\TestCase;
+use Tinderbox\ClickhouseBuilder\Query\Enums\Operator;
+use Tinderbox\ClickhouseBuilder\Query\Grammar;
+use Tinderbox\ClickhouseBuilder\Query\Identifier;
+use Tinderbox\ClickhouseBuilder\Query\Tuple;
+use Tinderbox\ClickhouseBuilder\Query\TwoElementsLogicExpression;
 
 /**
  * @property Mock|Connection connection
@@ -58,6 +60,71 @@ class BuilderTest extends TestCase
         $operator = $expression->getOperator();
         $this->assertInstanceOf(Operator::class, $operator);
         $this->assertSame('=', $operator->getValue());
+    }
+
+    public function testWhereKeyNot()
+    {
+        $ids = range(1, 5);
+
+        $this->builder->whereKeyNot($ids);
+
+        $wheres = $this->builder->getQuery()->getWheres();
+
+        $this->assertCount(1, $wheres);
+        /** @var TwoElementsLogicExpression $expression */
+        $expression = $wheres[0];
+        $this->assertInstanceOf(TwoElementsLogicExpression::class, $expression);
+        /** @var Identifier $first */
+        $first = $expression->getFirstElement();
+        $this->assertInstanceOf(Identifier::class, $first);
+        $this->assertSame($this->model->getTable() . '.' . $this->model->getKeyName(), (string)$first);
+        /** @var Tuple $second */
+        $second = $expression->getSecondElement();
+        $this->assertSame($ids, $second->getElements());
+        $operator = $expression->getOperator();
+        $this->assertInstanceOf(Operator::class, $operator);
+        $this->assertSame('NOT IN', $operator->getValue());
+    }
+
+    public function testWhereSimple()
+    {
+        $date = $this->faker()->date();
+        $this->builder->where('date_column', '>', $date);
+
+        $wheres = $this->builder->getQuery()->getWheres();
+
+        $this->assertCount(1, $wheres);
+        /** @var TwoElementsLogicExpression $expression */
+        $expression = $wheres[0];
+        $this->assertInstanceOf(TwoElementsLogicExpression::class, $expression);
+        /** @var Identifier $first */
+        $first = $expression->getFirstElement();
+        $this->assertInstanceOf(Identifier::class, $first);
+        $this->assertSame('date_column', (string)$first);
+        $this->assertSame($date, $expression->getSecondElement());
+        $operator = $expression->getOperator();
+        $this->assertInstanceOf(Operator::class, $operator);
+        $this->assertSame('>', $operator->getValue());
+    }
+
+    public function testWhereClosure()
+    {
+        /** @var Mock|DatabaseManager $resolver */
+        $resolver = $this->mock(DatabaseManager::class);
+        $resolver->shouldReceive('connection')
+            ->andReturn($this->connection);
+        EloquentModelCastingTest::setConnectionResolver($resolver);
+
+        $this->builder
+            ->where(function (Builder $query) {
+                $query->where('id', '<', 10)
+                    ->where('id', '=', 15, 'OR');
+            })
+            ->where('status', 100);
+
+        $sql = $this->builder->toSql();
+
+        $this->assertSame('SELECT * FROM `test_table` WHERE (`id` < 10 OR `id` = 15) AND `status` = 100', $sql);
     }
 
     public function testGet()
