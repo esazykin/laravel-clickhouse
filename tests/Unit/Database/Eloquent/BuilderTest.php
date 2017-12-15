@@ -4,21 +4,20 @@ declare(strict_types=1);
 
 namespace Esazykin\LaravelClickHouse\Tests\Unit\Database\Eloquent;
 
-use Esazykin\LaravelClickHouse\Database\Connection;
-use Esazykin\LaravelClickHouse\Database\Eloquent\Builder;
-use Esazykin\LaravelClickHouse\Database\Eloquent\Collection;
-use Esazykin\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
-use Esazykin\LaravelClickHouse\Tests\EloquentModelCastingTest;
-use Esazykin\LaravelClickHouse\Tests\Helpers;
-use Illuminate\Database\DatabaseManager;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Mockery\Mock;
 use PHPUnit\Framework\TestCase;
-use Tinderbox\ClickhouseBuilder\Query\Enums\Operator;
+use Illuminate\Database\DatabaseManager;
+use Tinderbox\ClickhouseBuilder\Query\Tuple;
+use Esazykin\LaravelClickHouse\Tests\Helpers;
 use Tinderbox\ClickhouseBuilder\Query\Grammar;
 use Tinderbox\ClickhouseBuilder\Query\Identifier;
-use Tinderbox\ClickhouseBuilder\Query\Tuple;
+use Esazykin\LaravelClickHouse\Database\Connection;
+use Tinderbox\ClickhouseBuilder\Query\Enums\Operator;
+use Esazykin\LaravelClickHouse\Database\Eloquent\Builder;
+use Esazykin\LaravelClickHouse\Database\Eloquent\Collection;
+use Esazykin\LaravelClickHouse\Tests\EloquentModelCastingTest;
 use Tinderbox\ClickhouseBuilder\Query\TwoElementsLogicExpression;
+use Esazykin\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
 
 /**
  * @property Mock|Connection connection
@@ -78,7 +77,7 @@ class BuilderTest extends TestCase
         /** @var Identifier $first */
         $first = $expression->getFirstElement();
         $this->assertInstanceOf(Identifier::class, $first);
-        $this->assertSame($this->model->getTable() . '.' . $this->model->getKeyName(), (string)$first);
+        $this->assertSame($this->model->getTable().'.'.$this->model->getKeyName(), (string) $first);
         /** @var Tuple $second */
         $second = $expression->getSecondElement();
         $this->assertSame($ids, $second->getElements());
@@ -101,7 +100,7 @@ class BuilderTest extends TestCase
         /** @var Identifier $first */
         $first = $expression->getFirstElement();
         $this->assertInstanceOf(Identifier::class, $first);
-        $this->assertSame('date_column', (string)$first);
+        $this->assertSame('date_column', (string) $first);
         $this->assertSame($date, $expression->getSecondElement());
         $operator = $expression->getOperator();
         $this->assertInstanceOf(Operator::class, $operator);
