@@ -136,7 +136,7 @@ class BuilderTest extends TestCase
 
         $sql = $this->builder->toSql();
         $this->assertSame(
-            'SELECT * FROM `test_table` WHERE `id` = ' . $id . ' OR `date_column` > \'' . $date . '\'',
+            'SELECT * FROM `test_table` WHERE `id` = '.$id.' OR `date_column` > \''.$date.'\'',
             $sql
         );
     }
@@ -153,7 +153,7 @@ class BuilderTest extends TestCase
         $this->connection
             ->shouldReceive('select')
             ->andReturn([
-                ['id' => $id, 'stringAttribute' => $stringAttribute,]
+                ['id' => $id, 'stringAttribute' => $stringAttribute],
             ]);
 
         $model = $this->builder->find($id);
