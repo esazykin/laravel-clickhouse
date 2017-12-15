@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Esazykin\LaravelClickHouse\Tests\Unit\Database\Eloquent;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Mockery\Mock;
 use PHPUnit\Framework\TestCase;
 use Illuminate\Database\DatabaseManager;
