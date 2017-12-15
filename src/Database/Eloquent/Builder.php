@@ -129,7 +129,7 @@ class Builder
      * @param  string $boolean
      * @return $this
      */
-    public function where($column, $operator = null, $value = null, string $boolean = 'and'): self
+    public function where($column, $operator = null, $value = null, string $boolean = 'AND'): self
     {
         if ($column instanceof Closure) {
             $this->query->where(function (QueryBuilder $queryBuilder) use ($column) {
@@ -153,7 +153,7 @@ class Builder
      */
     public function orWhere($column, $operator = null, $value = null)
     {
-        return $this->where($column, $operator, $value, 'or');
+        return $this->where($column, $operator, $value, 'OR');
     }
 
     /**
@@ -189,16 +189,15 @@ class Builder
      * Find a model by its primary key.
      *
      * @param  mixed $id
-     * @param  array $columns
      * @return Model|Collection|static[]|static|null
      */
-    public function find($id, $columns = ['*'])
+    public function find($id)
     {
         if (is_array($id) || $id instanceof Arrayable) {
             return $this->findMany($id);
         }
 
-        return $this->whereKey($id)->first($columns);
+        return $this->whereKey($id)->first();
     }
 
     /**
@@ -220,20 +219,19 @@ class Builder
      * Find a model by its primary key or throw an exception.
      *
      * @param  mixed $id
-     * @param  array $columns
      * @return Model|Collection
      *
      * @throws ModelNotFoundException
      */
-    public function findOrFail($id, array $columns = ['*'])
+    public function findOrFail($id)
     {
-        $result = $this->find($id, $columns);
+        $result = $this->find($id);
 
         if (is_array($id)) {
-            if (count($result) == count(array_unique($id))) {
+            if (count($result) === count(array_unique($id))) {
                 return $result;
             }
-        } elseif (!is_null($result)) {
+        } elseif ($result !== null) {
             return $result;
         }
 
@@ -245,14 +243,13 @@ class Builder
     /**
      * Execute the query and get the first result or throw an exception.
      *
-     * @param  array $columns
      * @return Model|static
      *
      * @throws ModelNotFoundException
      */
-    public function firstOrFail($columns = ['*'])
+    public function firstOrFail()
     {
-        $model = $this->first($columns);
+        $model = $this->first();
         if ($model !== null) {
             return $model;
         }
@@ -261,22 +258,10 @@ class Builder
     }
 
     /**
-     * Get a single column's value from the first result of a query.
-     *
-     * @param  string $column
-     * @return mixed
-     */
-    public function value($column)
-    {
-        if ($result = $this->first([$column])) {
-            return $result->{$column};
-        }
-    }
-
-    /**
      * Execute the query as a "select" statement.
      *
      * @return Collection|static[]
+     * @throws \Tinderbox\Clickhouse\Exceptions\ClientException
      */
     public function get()
     {

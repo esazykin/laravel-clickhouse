@@ -11,6 +11,7 @@ use Esazykin\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
 use Esazykin\LaravelClickHouse\Tests\EloquentModelCastingTest;
 use Esazykin\LaravelClickHouse\Tests\Helpers;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Mockery\Mock;
 use PHPUnit\Framework\TestCase;
 use Tinderbox\ClickhouseBuilder\Query\Enums\Operator;
@@ -125,6 +126,81 @@ class BuilderTest extends TestCase
         $sql = $this->builder->toSql();
 
         $this->assertSame('SELECT * FROM `test_table` WHERE (`id` < 10 OR `id` = 15) AND `status` = 100', $sql);
+    }
+
+    public function testOrWhere()
+    {
+        $id = $this->faker()->numberBetween(1);
+        $date = $this->faker()->date();
+        $this->builder->where('id', $id);
+        $this->builder->orWhere('date_column', '>', $date);
+
+        $sql = $this->builder->toSql();
+        $this->assertSame(
+            'SELECT * FROM `test_table` WHERE `id` = ' . $id . ' OR `date_column` > \'' . $date . '\'',
+            $sql
+        );
+    }
+
+    public function testFind()
+    {
+        $id = $this->faker()->numberBetween(1);
+        $stringAttribute = $this->faker()->word;
+
+        $this->connection
+            ->shouldReceive('getName')
+            ->andReturn($this->model->getConnectionName());
+
+        $this->connection
+            ->shouldReceive('select')
+            ->andReturn([
+                ['id' => $id, 'stringAttribute' => $stringAttribute,]
+            ]);
+
+        $model = $this->builder->find($id);
+
+        $this->assertInstanceOf(EloquentModelCastingTest::class, $model);
+        $this->assertSame($id, $model->id);
+        $this->assertSame($stringAttribute, $model->stringAttribute);
+    }
+
+    public function testFindMany()
+    {
+        $ids = collect()->times(5);
+
+        $this->connection
+            ->shouldReceive('getName')
+            ->andReturn($this->model->getConnectionName());
+
+        $this->connection
+            ->shouldReceive('select')
+            ->andReturn(
+                $ids
+                    ->map(function ($id) {
+                        return ['id' => $id];
+                    })
+                    ->toArray()
+            );
+
+        $models = $this->builder->findMany($ids->toArray());
+
+        $this->assertInstanceOf(Collection::class, $models);
+        $this->assertCount($ids->count(), $models);
+    }
+
+    public function testFindOrFail()
+    {
+        $this->expectException(ModelNotFoundException::class);
+
+        $this->connection
+            ->shouldReceive('getName')
+            ->andReturn($this->model->getConnectionName());
+
+        $this->connection
+            ->shouldReceive('select')
+            ->andReturn([]);
+
+        $this->builder->findOrFail($this->faker()->numberBetween());
     }
 
     public function testGet()
