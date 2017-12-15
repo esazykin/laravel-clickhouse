@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Esazykin\LaravelClickHouse\Tests\Unit\Database\Eloquent;
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Mockery\Mock;
 use PHPUnit\Framework\TestCase;
 use Illuminate\Database\DatabaseManager;
@@ -14,6 +13,7 @@ use Tinderbox\ClickhouseBuilder\Query\Grammar;
 use Tinderbox\ClickhouseBuilder\Query\Identifier;
 use Esazykin\LaravelClickHouse\Database\Connection;
 use Tinderbox\ClickhouseBuilder\Query\Enums\Operator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Esazykin\LaravelClickHouse\Database\Eloquent\Builder;
 use Esazykin\LaravelClickHouse\Database\Eloquent\Collection;
 use Esazykin\LaravelClickHouse\Tests\EloquentModelCastingTest;
@@ -137,7 +137,7 @@ class BuilderTest extends TestCase
 
         $sql = $this->builder->toSql();
         $this->assertSame(
-            'SELECT * FROM `test_table` WHERE `id` = ' . $id . ' OR `date_column` > \'' . $date . '\'',
+            'SELECT * FROM `test_table` WHERE `id` = '.$id.' OR `date_column` > \''.$date.'\'',
             $sql
         );
     }
@@ -154,7 +154,7 @@ class BuilderTest extends TestCase
         $this->connection
             ->shouldReceive('select')
             ->andReturn([
-                ['id' => $id, 'stringAttribute' => $stringAttribute,]
+                ['id' => $id, 'stringAttribute' => $stringAttribute],
             ]);
 
         $model = $this->builder->find($id);
