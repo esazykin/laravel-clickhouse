@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Esazykin\LaravelClickHouse\Tests\Unit\Database\Eloquent;
 
-use Carbon\Carbon;
 use Mockery\Mock;
+use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
 use Illuminate\Database\DatabaseManager;
 use Esazykin\LaravelClickHouse\Tests\Helpers;
@@ -42,7 +42,7 @@ class CollectionTest extends TestCase
     {
         $connectionResult = collect()
             ->times(5, function (int $id) {
-                return ['id' => $id,];
+                return ['id' => $id];
             });
 
         $this->connection
@@ -72,7 +72,7 @@ class CollectionTest extends TestCase
     {
         $connectionResult = collect()
             ->times(5, function (int $id) {
-                return ['id' => $id,];
+                return ['id' => $id];
             });
 
         $this->connection
@@ -107,7 +107,7 @@ class CollectionTest extends TestCase
     {
         $connectionResult = collect()
             ->times(5, function (int $id) {
-                return ['id' => $id,];
+                return ['id' => $id];
             });
 
         $this->connection
@@ -135,7 +135,7 @@ class CollectionTest extends TestCase
     {
         $connectionResult = collect()
             ->times(5, function (int $id) {
-                return ['id' => $id,];
+                return ['id' => $id];
             });
 
         $this->connection
@@ -157,7 +157,7 @@ class CollectionTest extends TestCase
             ->times(5, function (int $id) {
                 return [
                     'id' => $id,
-                    'floatAttribute' => (string)$this->faker()->randomFloat(2),
+                    'floatAttribute' => (string) $this->faker()->randomFloat(2),
                 ];
             });
 
@@ -192,9 +192,9 @@ class CollectionTest extends TestCase
             [
                 tap(new EloquentModelCastingTest, function (EloquentModelCastingTest $model) {
                     $model->id = 5;
-                })
+                }),
             ],
-            [1, 5,]
+            [1, 5],
         ];
     }
 
