@@ -124,10 +124,15 @@ class CollectionTest extends TestCase
         }
     }
 
-    public function testContains()
+    /**
+     * @dataProvider containsDataProvider
+     * @param bool $expected
+     * @param $key
+     * @param null $operator
+     * @param null $value
+     */
+    public function testContains(bool $expected, $key, $operator = null, $value = null)
     {
-        $key = 5;
-
         $connectionResult = collect()
             ->times(5, function (int $id) {
                 return ['id' => $id,];
@@ -137,7 +142,13 @@ class CollectionTest extends TestCase
             ->shouldReceive('select')
             ->andReturn($connectionResult->toArray());
 
-        $this->assertTrue(EloquentModelCastingTest::all()->contains($key));
+        if ($operator !== null && $value !== null) {
+            $contains = EloquentModelCastingTest::all()->contains($key, $operator, $value);
+        } else {
+            $contains = EloquentModelCastingTest::all()->contains($key);
+        }
+
+        $this->assertSame($expected, $contains);
     }
 
     public function testGet()
@@ -174,7 +185,7 @@ class CollectionTest extends TestCase
         );
     }
 
-    public function findDataProvider()
+    public function findDataProvider(): array
     {
         return [
             [5],
@@ -184,6 +195,16 @@ class CollectionTest extends TestCase
                 })
             ],
             [1, 5,]
+        ];
+    }
+
+    public function containsDataProvider()
+    {
+        return [
+            [true, 5,],
+            [false, 6,],
+            [true, 'id', '>=', 5],
+            [false, 'id', '>=', 6],
         ];
     }
 }
