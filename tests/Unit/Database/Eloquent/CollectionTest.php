@@ -201,8 +201,8 @@ class CollectionTest extends TestCase
     public function containsDataProvider()
     {
         return [
-            [true, 5,],
-            [false, 6,],
+            [true, 5],
+            [false, 6],
             [true, 'id', '>=', 5],
             [false, 'id', '>=', 6],
         ];
