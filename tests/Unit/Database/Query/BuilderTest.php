@@ -93,7 +93,7 @@ class BuilderTest extends TestCase
         $insertedRow = [
             $this->faker()->word => $this->faker()->randomDigit,
             $this->faker()->randomLetter => $this->faker()->randomDigit,
-            $this->faker()->randomLetter => $this->faker()->randomLetter,
+            $this->faker()->numerify('column_#') => $this->faker()->randomLetter,
         ];
         $inserted = [$insertedRow];
 
