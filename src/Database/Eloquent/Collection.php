@@ -30,7 +30,7 @@ class Collection extends \Illuminate\Database\Eloquent\Collection
             return $this->whereIn($this->first()->getKeyName(), $key);
         }
 
-        return Arr::first($this->items, function ($model) use ($key) {
+        return Arr::first($this->items, function (Model $model) use ($key) {
             return $model->getKey() === $key;
         }, $default);
     }
@@ -46,16 +46,10 @@ class Collection extends \Illuminate\Database\Eloquent\Collection
     public function contains($key, $operator = null, $value = null): bool
     {
         if (func_num_args() > 1 || $this->useAsCallable($key)) {
-            return parent::contains(...func_get_args());
+            return SupportCollection::contains(...func_get_args());
         }
 
-        if ($key instanceof Model) {
-            return parent::contains(function ($model) use ($key) {
-                return $model->is($key);
-            });
-        }
-
-        return parent::contains(function ($model) use ($key) {
+        return SupportCollection::contains(function (Model $model) use ($key) {
             return $model->getKey() === $key;
         });
     }
