@@ -9,8 +9,8 @@
   ],
   "require": {
     "php": ">=7.1",
-    "laravel/framework": "5.5.*",
-    "esazykin/clickhouse-builder": "^1.1"
+    "laravel/framework": "5.5.*|5.6.*|5.7.*|5.8.*|6.0.*|6.1.*|6.2.*",
+    "esazykin/clickhouse-builder": "^2.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^6.5",
