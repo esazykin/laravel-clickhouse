@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Esazykin\LaravelClickHouse\Database\Eloquent;
+namespace Bavix\LaravelClickHouse\Database\Eloquent;
 
 use ArrayAccess;
 use JsonSerializable;
@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Arrayable;
 use Tinderbox\ClickhouseBuilder\Query\Grammar;
-use Esazykin\LaravelClickHouse\Database\Connection;
+use Bavix\LaravelClickHouse\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Eloquent\Concerns\HasEvents;
 use Illuminate\Database\Eloquent\JsonEncodingException;
@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Concerns\HidesAttributes;
 use Illuminate\Database\Eloquent\Concerns\GuardsAttributes;
 use Illuminate\Database\Eloquent\Concerns\HasRelationships;
 use Illuminate\Database\ConnectionResolverInterface as Resolver;
-use Esazykin\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
+use Bavix\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
 
 /**
  * @mixin \Eloquent

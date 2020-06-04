@@ -1,7 +1,7 @@
 # laravel-clickhouse
-[![Build Status](https://travis-ci.org/esazykin/laravel-clickhouse.svg?branch=master)](https://travis-ci.org/esazykin/laravel-clickhouse)
+[![Build Status](https://travis-ci.org/bavix/laravel-clickhouse.svg?branch=master)](https://travis-ci.org/bavix/laravel-clickhouse)
 [![StyleCI](https://styleci.io/repos/112756298/shield?branch=master)](https://styleci.io/repos/112756298)
-[![Coverage Status](https://coveralls.io/repos/github/esazykin/laravel-clickhouse/badge.svg)](https://coveralls.io/github/esazykin/laravel-clickhouse)
+[![Coverage Status](https://coveralls.io/repos/github/bavix/laravel-clickhouse/badge.svg)](https://coveralls.io/github/bavix/laravel-clickhouse)
 
 Eloquent model for ClickHouse
 
@@ -11,12 +11,12 @@ Eloquent model for ClickHouse
 
 ## Installation
 ```sh
-$ composer require esazykin/laravel-clickhouse
+$ composer require bavix/laravel-clickhouse
 ```
 
 Then add the code above into your config/app.php file providers section
 ```php
-Esazykin\LaravelClickHouse\ClickHouseServiceProvider::class,
+Bavix\LaravelClickHouse\ClickHouseServiceProvider::class,
 ```
 And add new connection into your config/database.php file. Something like this:
 ```php
@@ -72,7 +72,7 @@ Then create model
 ```php
 <?php
 
-use Esazykin\LaravelClickHouse\Database\Eloquent\Model;
+use Bavix\LaravelClickHouse\Database\Eloquent\Model;
 
 class Payment extends Model
 {

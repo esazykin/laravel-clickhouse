@@ -1,5 +1,5 @@
 {
-  "name": "esazykin/laravel-clickhouse",
+  "name": "bavix/laravel-clickhouse",
   "type": "library",
   "license": "MIT",
   "keywords": [
@@ -8,23 +8,23 @@
     "eloquent"
   ],
   "require": {
-    "php": ">=7.1",
-    "laravel/framework": "5.5.*",
-    "esazykin/clickhouse-builder": "^1.1"
+    "php": ">=7.3",
+    "laravel/framework": "^6.0|^7.0",
+    "the-tinderbox/clickhouse-builder": "^3.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^6.5",
-    "mockery/mockery": "^1.0",
-    "fzaninotto/faker": "^1.7"
+    "phpunit/phpunit": "^9.1",
+    "mockery/mockery": "^1.4",
+    "fzaninotto/faker": "^1.9"
   },
   "autoload": {
     "psr-4": {
-      "Esazykin\\LaravelClickHouse\\": "src/"
+      "Bavix\\LaravelClickHouse\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Esazykin\\LaravelClickHouse\\Tests\\": "tests/"
+      "Bavix\\LaravelClickHouse\\Tests\\": "tests/"
     }
   },
   "scripts": {

@@ -2,17 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Esazykin\LaravelClickHouse\Tests\Database;
+namespace Bavix\LaravelClickHouse\Tests\Database;
 
 use PHPUnit\Framework\TestCase;
-use Esazykin\LaravelClickHouse\Database\Connection;
-use Esazykin\LaravelClickHouse\Database\Query\Builder;
+use Bavix\LaravelClickHouse\Database\Connection;
+use Bavix\LaravelClickHouse\Database\Query\Builder;
 
 class ConnectionTest extends TestCase
 {
-    public function testQuery()
+    public function testQuery(): void
     {
-        $connection = new Connection(['host' => 'localhost']);
+        $connection = new Connection([
+            'host' => 'localhost',
+            'port' => '8123',
+            'database' => 'default',
+        ]);
 
         $this->assertInstanceOf(Builder::class, $connection->query());
     }

@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Esazykin\LaravelClickHouse\Tests\Unit\Database\Eloquent;
+namespace Bavix\LaravelClickHouse\Tests\Unit\Database\Eloquent;
 
 use Mockery\Mock;
 use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
 use Illuminate\Database\DatabaseManager;
-use Esazykin\LaravelClickHouse\Tests\Helpers;
-use Esazykin\LaravelClickHouse\Database\Connection;
-use Esazykin\LaravelClickHouse\Database\Eloquent\Collection;
-use Esazykin\LaravelClickHouse\Tests\EloquentModelCastingTest;
+use Bavix\LaravelClickHouse\Tests\Helpers;
+use Bavix\LaravelClickHouse\Database\Connection;
+use Bavix\LaravelClickHouse\Database\Eloquent\Collection;
+use Bavix\LaravelClickHouse\Tests\EloquentModelCastingTest;
 
 /**
  * @property Mock|Connection connection
@@ -20,7 +20,7 @@ class CollectionTest extends TestCase
 {
     use Helpers;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -38,7 +38,7 @@ class CollectionTest extends TestCase
         EloquentModelCastingTest::setConnectionResolver($resolver);
     }
 
-    public function testMapModelToModel()
+    public function testMapModelToModel(): void
     {
         $connectionResult = collect()
             ->times(5, function (int $id) {
@@ -68,7 +68,7 @@ class CollectionTest extends TestCase
         });
     }
 
-    public function testMapModelToArray()
+    public function testMapModelToArray(): void
     {
         $connectionResult = collect()
             ->times(5, function (int $id) {
@@ -103,7 +103,7 @@ class CollectionTest extends TestCase
      * @dataProvider findDataProvider
      * @param $key
      */
-    public function testFind($key)
+    public function testFind($key): void
     {
         $connectionResult = collect()
             ->times(5, function (int $id) {
@@ -131,7 +131,7 @@ class CollectionTest extends TestCase
      * @param null $operator
      * @param null $value
      */
-    public function testContains(bool $expected, $key, $operator = null, $value = null)
+    public function testContains(bool $expected, $key, $operator = null, $value = null): void
     {
         $connectionResult = collect()
             ->times(5, function (int $id) {
@@ -151,7 +151,7 @@ class CollectionTest extends TestCase
         $this->assertSame($expected, $contains);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $connectionResult = collect()
             ->times(5, function (int $id) {

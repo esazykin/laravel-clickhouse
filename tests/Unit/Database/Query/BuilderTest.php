@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Esazykin\LaravelClickHouse\Tests\Unit\Database\Query;
+namespace Bavix\LaravelClickHouse\Tests\Unit\Database\Query;
 
 use PHPUnit\Framework\TestCase;
-use Esazykin\LaravelClickHouse\Tests\Helpers;
+use Bavix\LaravelClickHouse\Tests\Helpers;
 use Tinderbox\ClickhouseBuilder\Query\Grammar;
-use Esazykin\LaravelClickHouse\Database\Connection;
+use Bavix\LaravelClickHouse\Database\Connection;
 use Tinderbox\ClickhouseBuilder\Query\Enums\Format;
-use Esazykin\LaravelClickHouse\Database\Query\Builder;
+use Bavix\LaravelClickHouse\Database\Query\Builder;
 
 /**
  * @property \Mockery\MockInterface|Connection connection
@@ -19,7 +19,7 @@ class BuilderTest extends TestCase
 {
     use Helpers;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -96,9 +96,11 @@ class BuilderTest extends TestCase
             $this->faker()->numerify('column_#') => $this->faker()->randomLetter,
         ];
         $inserted = [$insertedRow];
+        ksort($insertedRow);
+        $values = collect($insertedRow)->values()->toArray();
 
         $generatedSql = sprintf(
-            'INSERT INTO `%s` (%s) FORMAT %s (?, ?, ?)',
+            'INSERT INTO `%s` (%s) FORMAT %s (\'%s\', %d, %d)',
             $this->builder->getFrom()->getTable(),
             collect($insertedRow)
                 ->keys()
@@ -107,16 +109,13 @@ class BuilderTest extends TestCase
                     return sprintf('`%s`', $columnName);
                 })
                 ->implode(', '),
-            Format::VALUES
+            Format::VALUES,
+            ...$values
         );
 
-        ksort($insertedRow);
         $this->connection
             ->shouldReceive('insert')
-            ->withArgs([
-                $generatedSql,
-                collect($insertedRow)->values()->toArray(),
-            ])
+            ->withArgs([$generatedSql, $values])
             ->andReturn(true);
 
         $this->assertTrue($this->builder->insert($inserted));

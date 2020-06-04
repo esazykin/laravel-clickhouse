@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Esazykin\LaravelClickHouse\Tests\Unit\Database\Eloquent;
+namespace Bavix\LaravelClickHouse\Tests\Unit\Database\Eloquent;
 
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\TestCase;
-use Esazykin\LaravelClickHouse\Tests\Helpers;
-use Esazykin\LaravelClickHouse\Tests\EloquentModelTest;
+use Bavix\LaravelClickHouse\Tests\Helpers;
+use Bavix\LaravelClickHouse\Tests\EloquentModelTest;
 use Illuminate\Database\Eloquent\MassAssignmentException;
-use Esazykin\LaravelClickHouse\Tests\EloquentModelWithTest;
-use Esazykin\LaravelClickHouse\Tests\EloquentModelCastingTest;
+use Bavix\LaravelClickHouse\Tests\EloquentModelWithTest;
+use Bavix\LaravelClickHouse\Tests\EloquentModelCastingTest;
 
 class ModelTest extends TestCase
 {
     use Helpers;
 
-    public function testAttributeManipulation()
+    public function testAttributeManipulation(): void
     {
         $model = new EloquentModelTest();
         $model->status = 'successful';
@@ -31,14 +31,14 @@ class ModelTest extends TestCase
         $this->assertEquals(json_encode(range(1, 5)), $attributes['list_items']);
     }
 
-    public function testDirtyAttributes()
+    public function testDirtyAttributes(): void
     {
         $this->expectException(MassAssignmentException::class);
 
         new EloquentModelTest(['foo' => '1', 'bar' => 2, 'baz' => 3]);
     }
 
-    public function testDirtyOnCastOrDateAttributes()
+    public function testDirtyOnCastOrDateAttributes(): void
     {
         $model = new EloquentModelCastingTest();
         $model->setDateFormat('Y-m-d H:i:s');
@@ -61,7 +61,7 @@ class ModelTest extends TestCase
         $this->assertTrue($model->isDirty('datetimeAttribute'));
     }
 
-    public function testCalculatedAttributes()
+    public function testCalculatedAttributes(): void
     {
         $model = new EloquentModelTest();
         $model->password = 'secret';
@@ -74,13 +74,13 @@ class ModelTest extends TestCase
         $this->assertEquals($hash, $model->password_hash);
     }
 
-    public function testWithMethodCallsQueryBuilderCorrectly()
+    public function testWithMethodCallsQueryBuilderCorrectly(): void
     {
         $result = EloquentModelWithTest::with('foo', 'bar');
         $this->assertEquals('foo', $result);
     }
 
-    public function testTimestampsAreReturnedAsObjectsFromPlainDatesAndTimestamps()
+    public function testTimestampsAreReturnedAsObjectsFromPlainDatesAndTimestamps(): void
     {
         $datetime = '2012-12-04';
         $model = new EloquentModelCastingTest();
