@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Esazykin\LaravelClickHouse\Tests\Unit\Database\Eloquent;
+namespace Bavix\LaravelClickHouse\Tests\Unit\Database\Eloquent;
 
 use Mockery\Mock;
 use PHPUnit\Framework\TestCase;
 use Illuminate\Database\DatabaseManager;
 use Tinderbox\ClickhouseBuilder\Query\Tuple;
-use Esazykin\LaravelClickHouse\Tests\Helpers;
+use Bavix\LaravelClickHouse\Tests\Helpers;
 use Tinderbox\ClickhouseBuilder\Query\Grammar;
 use Tinderbox\ClickhouseBuilder\Query\Identifier;
-use Esazykin\LaravelClickHouse\Database\Connection;
+use Bavix\LaravelClickHouse\Database\Connection;
 use Tinderbox\ClickhouseBuilder\Query\Enums\Operator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Esazykin\LaravelClickHouse\Database\Eloquent\Builder;
-use Esazykin\LaravelClickHouse\Database\Eloquent\Collection;
-use Esazykin\LaravelClickHouse\Tests\EloquentModelCastingTest;
+use Bavix\LaravelClickHouse\Database\Eloquent\Builder;
+use Bavix\LaravelClickHouse\Database\Eloquent\Collection;
+use Bavix\LaravelClickHouse\Tests\EloquentModelCastingTest;
 use Tinderbox\ClickhouseBuilder\Query\TwoElementsLogicExpression;
-use Esazykin\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
+use Bavix\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
 
 /**
  * @property Mock|Connection connection
@@ -29,7 +29,7 @@ class BuilderTest extends TestCase
 {
     use Helpers;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -41,7 +41,7 @@ class BuilderTest extends TestCase
             ->setModel($this->model);
     }
 
-    public function testWhereKey()
+    public function testWhereKey(): void
     {
         $id = $this->faker()->numberBetween(1);
 
@@ -63,7 +63,7 @@ class BuilderTest extends TestCase
         $this->assertSame('=', $operator->getValue());
     }
 
-    public function testWhereKeyNot()
+    public function testWhereKeyNot(): void
     {
         $ids = range(1, 5);
 
@@ -87,7 +87,7 @@ class BuilderTest extends TestCase
         $this->assertSame('NOT IN', $operator->getValue());
     }
 
-    public function testWhereSimple()
+    public function testWhereSimple(): void
     {
         $date = $this->faker()->date();
         $this->builder->where('date_column', '>', $date);
@@ -108,7 +108,7 @@ class BuilderTest extends TestCase
         $this->assertSame('>', $operator->getValue());
     }
 
-    public function testWhereClosure()
+    public function testWhereClosure(): void
     {
         /** @var Mock|DatabaseManager $resolver */
         $resolver = $this->mock(DatabaseManager::class);
@@ -128,7 +128,7 @@ class BuilderTest extends TestCase
         $this->assertSame('SELECT * FROM `test_table` WHERE (`id` < 10 OR `id` = 15) AND `status` = 100', $sql);
     }
 
-    public function testOrWhere()
+    public function testOrWhere(): void
     {
         $id = $this->faker()->numberBetween(1);
         $date = $this->faker()->date();
@@ -142,7 +142,7 @@ class BuilderTest extends TestCase
         );
     }
 
-    public function testFind()
+    public function testFind(): void
     {
         $id = $this->faker()->numberBetween(1);
         $stringAttribute = $this->faker()->word;
@@ -164,7 +164,7 @@ class BuilderTest extends TestCase
         $this->assertSame($stringAttribute, $model->stringAttribute);
     }
 
-    public function testFindMany()
+    public function testFindMany(): void
     {
         $ids = collect()->times(5);
 
@@ -188,7 +188,7 @@ class BuilderTest extends TestCase
         $this->assertCount($ids->count(), $models);
     }
 
-    public function testFindOrFail()
+    public function testFindOrFail(): void
     {
         $this->expectException(ModelNotFoundException::class);
 
@@ -203,7 +203,7 @@ class BuilderTest extends TestCase
         $this->builder->findOrFail($this->faker()->numberBetween());
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $connectionResultRow = [
             'id' => $this->faker()->randomDigit,

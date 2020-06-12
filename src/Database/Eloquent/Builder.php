@@ -1,6 +1,6 @@
 <?php
 
-namespace Esazykin\LaravelClickHouse\Database\Eloquent;
+namespace Bavix\LaravelClickHouse\Database\Eloquent;
 
 use Closure;
 use BadMethodCallException;
@@ -12,7 +12,7 @@ use Illuminate\Database\Concerns\BuildsQueries;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\RelationNotFoundException;
-use Esazykin\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
+use Bavix\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
 
 /**
  * @mixin QueryBuilder
@@ -24,14 +24,14 @@ class Builder
     /**
      * The base query builder instance.
      *
-     * @var \Esazykin\LaravelClickHouse\Database\Query\Builder
+     * @var \Bavix\LaravelClickHouse\Database\Query\Builder
      */
     protected $query;
 
     /**
      * The model being queried.
      *
-     * @var \Esazykin\LaravelClickHouse\Database\Eloquent\Model
+     * @var \Bavix\LaravelClickHouse\Database\Eloquent\Model
      */
     protected $model;
 
