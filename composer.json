@@ -28,6 +28,13 @@
       "Bavix\\LaravelClickHouse\\Tests\\": "tests/"
     }
   },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Bavix\\LaravelClickHouse\\ClickHouseServiceProvider"
+      ]
+    }
+  },
   "scripts": {
     "test": "vendor/bin/phpunit --stop-on-failure tests/"
   }
