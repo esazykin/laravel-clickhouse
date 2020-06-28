@@ -22,7 +22,7 @@ And add new connection into your config/database.php file. Something like this:
 ```php
 'connections' => [
     'clickhouse' => [
-        'driver' => 'clickhouse',
+        'driver' => 'clickhouse-ext',
         'host' => '',
         'port' => '',
         'database' => '',
@@ -39,7 +39,7 @@ Or like this, if clickhouse runs in cluster
 ```php
 'connections' => [
     'clickhouse' => [
-        'driver' => 'clickhouse',
+        'driver' => 'clickhouse-ext',
         'cluster' => [
             'server-1' => [
                 'host' => '',
