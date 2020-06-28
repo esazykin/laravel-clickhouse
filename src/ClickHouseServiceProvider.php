@@ -11,21 +11,23 @@ use Bavix\LaravelClickHouse\Database\Eloquent\Model;
 
 class ClickHouseServiceProvider extends ServiceProvider
 {
+    /**
+     * @return void
+     */
     public function boot(): void
     {
-        /** @var DatabaseManager $db */
-        $db = $this->app->get('db');
+        $this->app->resolving('db', function ($db) {
+            $db->extend('clickhouse-ext', function ($config, $name) {
+                $config['name'] = $name;
+                $connection = new Connection($config);
+                if ($this->app->bound('events')) {
+                    $connection->setEventDispatcher($this->app['events']);
+                }
 
-        $db->extend('clickhouse-ext', function ($config, $name) {
-            $config['name'] = $name;
-            $connection = new Connection($config);
-            if ($this->app->bound('events')) {
-                $connection->setEventDispatcher($this->app['events']);
-            }
+                return $connection;
+            });
 
-            return $connection;
+            Model::setConnectionResolver($db);
         });
-
-        Model::setConnectionResolver($db);
     }
 }
