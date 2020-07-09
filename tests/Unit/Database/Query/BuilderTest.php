@@ -41,8 +41,8 @@ class BuilderTest extends TestCase
 
         $builderResult = $this->builder->get();
 
-        $this->assertInstanceOf(\Illuminate\Support\Collection::class, $builderResult);
-        $this->assertSame($connectionResult, $builderResult->toArray());
+        self::assertInstanceOf(\Illuminate\Support\Collection::class, $builderResult);
+        self::assertSame($connectionResult, $builderResult->toArray());
     }
 
     public function testCount(): void
@@ -55,7 +55,7 @@ class BuilderTest extends TestCase
 
         $builderResult = $this->builder->count();
 
-        $this->assertCount($builderResult, $connectionResult);
+        self::assertCount($builderResult, $connectionResult);
     }
 
     public function testFirst(): void
@@ -68,12 +68,12 @@ class BuilderTest extends TestCase
 
         $builderResult = $this->builder->first();
 
-        $this->assertSame($connectionResult[0], $builderResult);
+        self::assertSame($connectionResult[0], $builderResult);
     }
 
     public function testNewQuery(): void
     {
-        $this->assertInstanceOf(Builder::class, $this->builder->newQuery());
+        self::assertInstanceOf(Builder::class, $this->builder->newQuery());
     }
 
     public function testInsertFiles(): void
@@ -83,12 +83,12 @@ class BuilderTest extends TestCase
             ->andReturn([]);
 
         $builderResult = $this->builder->insertFiles(['column_1', 'column_2'], []);
-        $this->assertSame([], $builderResult);
+        self::assertSame([], $builderResult);
     }
 
     public function testInsert(): void
     {
-        $this->assertFalse($this->builder->insert([]));
+        self::assertFalse($this->builder->insert([]));
 
         $insertedRow = [
             $this->faker()->word => $this->faker()->randomDigit,
@@ -118,6 +118,6 @@ class BuilderTest extends TestCase
             ->withArgs([$generatedSql, $values])
             ->andReturn(true);
 
-        $this->assertTrue($this->builder->insert($inserted));
+        self::assertTrue($this->builder->insert($inserted));
     }
 }

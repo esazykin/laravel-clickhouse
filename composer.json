@@ -10,7 +10,8 @@
   "require": {
     "php": ">=7.2",
     "laravel/framework": "^6.0|^7.0",
-    "the-tinderbox/clickhouse-builder": "^3.0"
+    "the-tinderbox/clickhouse-builder": "^3.0",
+    "ext-json": "*"
   },
   "require-dev": {
     "infection/infection": "0.15.*|0.16.*",

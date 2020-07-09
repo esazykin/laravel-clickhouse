@@ -22,11 +22,13 @@ use Illuminate\Database\ConnectionResolverInterface as Resolver;
 use Bavix\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
 
 /**
- * @mixin \Eloquent
+ * Class Model
+ * @package Bavix\LaravelClickHouse\Database\Eloquent
  */
 abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
 {
     use Concerns\HasAttributes,
+        Concerns\Common,
         HasEvents,
         HasRelationships,
         HidesAttributes,
@@ -37,7 +39,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      *
      * @var string
      */
-    protected $connection = 'clickhouse';
+    protected $connection = 'bavix::clickhouse';
 
     /**
      * The table associated with the model.
@@ -426,7 +428,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      */
     public static function resolveConnection(string $connection = null)
     {
-        return static::$resolver->connection($connection);
+        return static::getConnectionResolver()->connection($connection);
     }
 
     /**

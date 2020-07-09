@@ -18,6 +18,6 @@ class ConnectionTest extends TestCase
             'database' => 'default',
         ]);
 
-        $this->assertInstanceOf(Builder::class, $connection->query());
+        self::assertInstanceOf(Builder::class, $connection->query());
     }
 }
