@@ -40,9 +40,9 @@ Or like this, if clickhouse runs in cluster
 'connections' => [
     'bavix::clickhouse' => [
         'driver' => 'bavix::clickhouse',
-        'cluster' => [
-            'server-1' => [
-                'host' => '',
+        'servers' => [
+            [
+                'host' => 'ch-00.domain.com',
                 'port' => '',
                 'database' => '',
                 'username' => '',
@@ -52,8 +52,8 @@ Or like this, if clickhouse runs in cluster
                     'protocol' => 'https'
                 ]
             ],
-            'server-2' => [
-                'host' => '',
+            [
+                'host' => 'ch-01.domain.com',
                 'port' => '',
                 'database' => '',
                 'username' => '',
@@ -65,7 +65,7 @@ Or like this, if clickhouse runs in cluster
             ]
         ]
     ]
-]
+],
 ```
 
 Then create model
