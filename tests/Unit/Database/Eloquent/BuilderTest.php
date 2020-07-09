@@ -49,18 +49,18 @@ class BuilderTest extends TestCase
 
         $wheres = $this->builder->getQuery()->getWheres();
 
-        $this->assertCount(1, $wheres);
+        self::assertCount(1, $wheres);
         /** @var TwoElementsLogicExpression $expression */
         $expression = $wheres[0];
-        $this->assertInstanceOf(TwoElementsLogicExpression::class, $expression);
+        self::assertInstanceOf(TwoElementsLogicExpression::class, $expression);
         /** @var Identifier $first */
         $first = $expression->getFirstElement();
-        $this->assertInstanceOf(Identifier::class, $first);
-        $this->assertSame($this->model->getTable().'.'.$this->model->getKeyName(), (string) $first);
-        $this->assertSame($id, $expression->getSecondElement());
+        self::assertInstanceOf(Identifier::class, $first);
+        self::assertSame($this->model->getTable().'.'.$this->model->getKeyName(), (string) $first);
+        self::assertSame($id, $expression->getSecondElement());
         $operator = $expression->getOperator();
-        $this->assertInstanceOf(Operator::class, $operator);
-        $this->assertSame('=', $operator->getValue());
+        self::assertInstanceOf(Operator::class, $operator);
+        self::assertSame('=', $operator->getValue());
     }
 
     public function testWhereKeyNot(): void
@@ -71,20 +71,20 @@ class BuilderTest extends TestCase
 
         $wheres = $this->builder->getQuery()->getWheres();
 
-        $this->assertCount(1, $wheres);
+        self::assertCount(1, $wheres);
         /** @var TwoElementsLogicExpression $expression */
         $expression = $wheres[0];
-        $this->assertInstanceOf(TwoElementsLogicExpression::class, $expression);
+        self::assertInstanceOf(TwoElementsLogicExpression::class, $expression);
         /** @var Identifier $first */
         $first = $expression->getFirstElement();
-        $this->assertInstanceOf(Identifier::class, $first);
-        $this->assertSame($this->model->getTable().'.'.$this->model->getKeyName(), (string) $first);
+        self::assertInstanceOf(Identifier::class, $first);
+        self::assertSame($this->model->getTable().'.'.$this->model->getKeyName(), (string) $first);
         /** @var Tuple $second */
         $second = $expression->getSecondElement();
-        $this->assertSame($ids, $second->getElements());
+        self::assertSame($ids, $second->getElements());
         $operator = $expression->getOperator();
-        $this->assertInstanceOf(Operator::class, $operator);
-        $this->assertSame('NOT IN', $operator->getValue());
+        self::assertInstanceOf(Operator::class, $operator);
+        self::assertSame('NOT IN', $operator->getValue());
     }
 
     public function testWhereSimple(): void
@@ -94,18 +94,18 @@ class BuilderTest extends TestCase
 
         $wheres = $this->builder->getQuery()->getWheres();
 
-        $this->assertCount(1, $wheres);
+        self::assertCount(1, $wheres);
         /** @var TwoElementsLogicExpression $expression */
         $expression = $wheres[0];
-        $this->assertInstanceOf(TwoElementsLogicExpression::class, $expression);
+        self::assertInstanceOf(TwoElementsLogicExpression::class, $expression);
         /** @var Identifier $first */
         $first = $expression->getFirstElement();
-        $this->assertInstanceOf(Identifier::class, $first);
-        $this->assertSame('date_column', (string) $first);
-        $this->assertSame($date, $expression->getSecondElement());
+        self::assertInstanceOf(Identifier::class, $first);
+        self::assertSame('date_column', (string) $first);
+        self::assertSame($date, $expression->getSecondElement());
         $operator = $expression->getOperator();
-        $this->assertInstanceOf(Operator::class, $operator);
-        $this->assertSame('>', $operator->getValue());
+        self::assertInstanceOf(Operator::class, $operator);
+        self::assertSame('>', $operator->getValue());
     }
 
     public function testWhereClosure(): void
@@ -125,7 +125,7 @@ class BuilderTest extends TestCase
 
         $sql = $this->builder->toSql();
 
-        $this->assertSame('SELECT * FROM `test_table` WHERE (`id` < 10 OR `id` = 15) AND `status` = 100', $sql);
+        self::assertSame('SELECT * FROM `test_table` WHERE (`id` < 10 OR `id` = 15) AND `status` = 100', $sql);
     }
 
     public function testOrWhere(): void
@@ -136,7 +136,7 @@ class BuilderTest extends TestCase
         $this->builder->orWhere('date_column', '>', $date);
 
         $sql = $this->builder->toSql();
-        $this->assertSame(
+        self::assertSame(
             'SELECT * FROM `test_table` WHERE `id` = '.$id.' OR `date_column` > \''.$date.'\'',
             $sql
         );
@@ -159,9 +159,9 @@ class BuilderTest extends TestCase
 
         $model = $this->builder->find($id);
 
-        $this->assertInstanceOf(EloquentModelCastingTest::class, $model);
-        $this->assertSame($id, $model->id);
-        $this->assertSame($stringAttribute, $model->stringAttribute);
+        self::assertInstanceOf(EloquentModelCastingTest::class, $model);
+        self::assertSame($id, $model->id);
+        self::assertSame($stringAttribute, $model->stringAttribute);
     }
 
     public function testFindMany(): void
@@ -184,8 +184,8 @@ class BuilderTest extends TestCase
 
         $models = $this->builder->findMany($ids->toArray());
 
-        $this->assertInstanceOf(Collection::class, $models);
-        $this->assertCount($ids->count(), $models);
+        self::assertInstanceOf(Collection::class, $models);
+        self::assertCount($ids->count(), $models);
     }
 
     public function testFindOrFail(): void
@@ -234,18 +234,18 @@ class BuilderTest extends TestCase
 
         $collection = $this->builder->get();
 
-        $this->assertInstanceOf(Collection::class, $collection);
-        $this->assertCount(1, $collection);
+        self::assertInstanceOf(Collection::class, $collection);
+        self::assertCount(1, $collection);
 
         $retrievedModel = $collection[0];
-        $this->assertSame($connectionResultRow['id'], $retrievedModel->id);
-        $this->assertSame((int) $connectionResultRow['intAttribute'], $retrievedModel->intAttribute);
-        $this->assertSame((float) $connectionResultRow['floatAttribute'], $retrievedModel->floatAttribute);
-        $this->assertSame((string) $connectionResultRow['stringAttribute'], $retrievedModel->stringAttribute);
-        $this->assertTrue($retrievedModel->boolAttribute);
-        $this->assertTrue($retrievedModel->booleanAttribute);
-        $this->assertEquals(json_decode($connectionResultRow['objectAttribute']), $retrievedModel->objectAttribute);
-        $this->assertSame(json_decode($connectionResultRow['arrayAttribute'], true), $retrievedModel->arrayAttribute);
-        $this->assertSame($connectionResultRow['arrayAttribute'], $retrievedModel->jsonAttribute);
+        self::assertSame($connectionResultRow['id'], $retrievedModel->id);
+        self::assertSame((int) $connectionResultRow['intAttribute'], $retrievedModel->intAttribute);
+        self::assertSame((float) $connectionResultRow['floatAttribute'], $retrievedModel->floatAttribute);
+        self::assertSame((string) $connectionResultRow['stringAttribute'], $retrievedModel->stringAttribute);
+        self::assertTrue($retrievedModel->boolAttribute);
+        self::assertTrue($retrievedModel->booleanAttribute);
+        self::assertEquals(json_decode($connectionResultRow['objectAttribute']), $retrievedModel->objectAttribute);
+        self::assertSame(json_decode($connectionResultRow['arrayAttribute'], true), $retrievedModel->arrayAttribute);
+        self::assertSame($connectionResultRow['arrayAttribute'], $retrievedModel->jsonAttribute);
     }
 }

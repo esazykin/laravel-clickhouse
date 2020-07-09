@@ -20,15 +20,15 @@ class ModelTest extends TestCase
     {
         $model = new EloquentModelTest();
         $model->status = 'successful';
-        $this->assertEquals('successful', $model->status);
-        $this->assertTrue(isset($model->status));
+        self::assertEquals('successful', $model->status);
+        self::assertTrue(isset($model->status));
         unset($model->status);
-        $this->assertFalse(isset($model->status));
+        self::assertFalse(isset($model->status));
         // test mutation
         $model->list_items = range(1, 5);
-        $this->assertEquals(range(1, 5), $model->list_items);
+        self::assertEquals(range(1, 5), $model->list_items);
         $attributes = $model->getAttributes();
-        $this->assertEquals(json_encode(range(1, 5)), $attributes['list_items']);
+        self::assertEquals(json_encode(range(1, 5)), $attributes['list_items']);
     }
 
     public function testDirtyAttributes(): void
@@ -53,12 +53,12 @@ class ModelTest extends TestCase
         $model->bar = '2017-03-18 00:00:00';
         $model->dateAttribute = '2017-03-18 00:00:00';
         $model->datetimeAttribute = null;
-        $this->assertTrue($model->isDirty());
-        $this->assertTrue($model->isDirty('foo'));
-        $this->assertTrue($model->isDirty('bar'));
-        $this->assertFalse($model->isDirty('boolAttribute'));
-        $this->assertFalse($model->isDirty('dateAttribute'));
-        $this->assertTrue($model->isDirty('datetimeAttribute'));
+        self::assertTrue($model->isDirty());
+        self::assertTrue($model->isDirty('foo'));
+        self::assertTrue($model->isDirty('bar'));
+        self::assertFalse($model->isDirty('boolAttribute'));
+        self::assertFalse($model->isDirty('dateAttribute'));
+        self::assertTrue($model->isDirty('datetimeAttribute'));
     }
 
     public function testCalculatedAttributes(): void
@@ -67,17 +67,17 @@ class ModelTest extends TestCase
         $model->password = 'secret';
         $attributes = $model->getAttributes();
         // ensure password attribute was not set to null
-        $this->assertArrayNotHasKey('password', $attributes);
-        $this->assertSame('******', $model->password);
+        self::assertArrayNotHasKey('password', $attributes);
+        self::assertSame('******', $model->password);
         $hash = 'e5e9fa1ba31ecd1ae84f75caaa474f3a663f05f4';
-        $this->assertEquals($hash, $attributes['password_hash']);
-        $this->assertEquals($hash, $model->password_hash);
+        self::assertEquals($hash, $attributes['password_hash']);
+        self::assertEquals($hash, $model->password_hash);
     }
 
     public function testWithMethodCallsQueryBuilderCorrectly(): void
     {
         $result = EloquentModelWithTest::with('foo', 'bar');
-        $this->assertEquals('foo', $result);
+        self::assertEquals('foo', $result);
     }
 
     public function testTimestampsAreReturnedAsObjectsFromPlainDatesAndTimestamps(): void
@@ -86,7 +86,7 @@ class ModelTest extends TestCase
         $model = new EloquentModelCastingTest();
         $model->payed_at = $datetime;
 
-        $this->assertInstanceOf(Carbon::class, $model->payed_at);
-        $this->assertSame($datetime.' 00:00:00', $model->payed_at->toDateTimeString());
+        self::assertInstanceOf(Carbon::class, $model->payed_at);
+        self::assertSame($datetime.' 00:00:00', $model->payed_at->toDateTimeString());
     }
 }
