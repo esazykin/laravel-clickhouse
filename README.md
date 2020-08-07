@@ -8,10 +8,11 @@ Eloquent model for ClickHouse
 ## Prerequisites
 - php 7.1
 - clickhouse server
+- laravel 7.*
 
 ## Installation
 ```sh
-$ composer require esazykin/laravel-clickhouse
+$ composer require galifax/laravel-clickhouse
 ```
 
 Then add the code above into your config/app.php file providers section
