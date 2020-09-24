@@ -8,6 +8,7 @@ class Pdo
 {
     /**
      * @param mixed $binding
+     *
      * @return mixed
      */
     public function quote($binding)

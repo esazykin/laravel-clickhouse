@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Bavix\LaravelClickHouse\Tests\Unit\Database\Query;
 
-use PHPUnit\Framework\TestCase;
-use Bavix\LaravelClickHouse\Tests\Helpers;
-use Tinderbox\ClickhouseBuilder\Query\Grammar;
 use Bavix\LaravelClickHouse\Database\Connection;
-use Tinderbox\ClickhouseBuilder\Query\Enums\Format;
 use Bavix\LaravelClickHouse\Database\Query\Builder;
+use Bavix\LaravelClickHouse\Tests\Helpers;
+use PHPUnit\Framework\TestCase;
+use Tinderbox\ClickhouseBuilder\Query\Enums\Format;
+use Tinderbox\ClickhouseBuilder\Query\Grammar;
 
 /**
  * @property \Mockery\MockInterface|Connection connection
@@ -91,8 +91,8 @@ class BuilderTest extends TestCase
         self::assertFalse($this->builder->insert([]));
 
         $insertedRow = [
-            $this->faker()->word => $this->faker()->randomDigit,
-            $this->faker()->randomLetter => $this->faker()->randomDigit,
+            $this->faker()->word                 => $this->faker()->randomDigit,
+            $this->faker()->randomLetter         => $this->faker()->randomDigit,
             $this->faker()->numerify('column_#') => $this->faker()->randomLetter,
         ];
 
@@ -124,8 +124,7 @@ class BuilderTest extends TestCase
         $this->connection
             ->shouldReceive('insert')
             ->withArgs([$generatedSql, $values])
-            ->andReturn(true)
-        ;
+            ->andReturn(true);
 
         self::assertTrue($this->builder->insert($inserted));
     }

@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace Bavix\LaravelClickHouse\Tests\Unit\Database\Eloquent;
 
-use Mockery\Mock;
-use PHPUnit\Framework\TestCase;
-use Illuminate\Database\DatabaseManager;
-use Tinderbox\ClickhouseBuilder\Query\Tuple;
-use Bavix\LaravelClickHouse\Tests\Helpers;
-use Tinderbox\ClickhouseBuilder\Query\Grammar;
-use Tinderbox\ClickhouseBuilder\Query\Identifier;
 use Bavix\LaravelClickHouse\Database\Connection;
-use Tinderbox\ClickhouseBuilder\Query\Enums\Operator;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Bavix\LaravelClickHouse\Database\Eloquent\Builder;
 use Bavix\LaravelClickHouse\Database\Eloquent\Collection;
-use Bavix\LaravelClickHouse\Tests\EloquentModelCastingTest;
-use Tinderbox\ClickhouseBuilder\Query\TwoElementsLogicExpression;
 use Bavix\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
+use Bavix\LaravelClickHouse\Tests\EloquentModelCastingTest;
+use Bavix\LaravelClickHouse\Tests\Helpers;
+use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Mockery\Mock;
+use PHPUnit\Framework\TestCase;
+use Tinderbox\ClickhouseBuilder\Query\Enums\Operator;
+use Tinderbox\ClickhouseBuilder\Query\Grammar;
+use Tinderbox\ClickhouseBuilder\Query\Identifier;
+use Tinderbox\ClickhouseBuilder\Query\Tuple;
+use Tinderbox\ClickhouseBuilder\Query\TwoElementsLogicExpression;
 
 /**
  * @property Mock|Connection connection
@@ -206,18 +206,18 @@ class BuilderTest extends TestCase
     public function testGet(): void
     {
         $connectionResultRow = [
-            'id' => $this->faker()->randomDigit,
-            'intAttribute' => (string) $this->faker()->randomDigit,
-            'floatAttribute' => (string) $this->faker()->randomFloat(2),
-            'stringAttribute' => $this->faker()->randomDigit,
-            'boolAttribute' => 1,
+            'id'               => $this->faker()->randomDigit,
+            'intAttribute'     => (string) $this->faker()->randomDigit,
+            'floatAttribute'   => (string) $this->faker()->randomFloat(2),
+            'stringAttribute'  => $this->faker()->randomDigit,
+            'boolAttribute'    => 1,
             'booleanAttribute' => 1,
-            'objectAttribute' => json_encode([
+            'objectAttribute'  => json_encode([
                 $this->faker()->word => $this->faker()->randomLetter,
             ]),
-            'arrayAttribute' => json_encode(range(1, 5)),
-            'dateAttribute' => now()->toDateTimeString(),
-            'datetimeAttribute' => now()->toDateString(),
+            'arrayAttribute'     => json_encode(range(1, 5)),
+            'dateAttribute'      => now()->toDateTimeString(),
+            'datetimeAttribute'  => now()->toDateString(),
             'timestampAttribute' => now()->toDateString(),
         ];
         $connectionResultRow['jsonAttribute'] = json_encode($connectionResultRow['arrayAttribute']);
