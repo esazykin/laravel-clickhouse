@@ -8,6 +8,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Tinderbox\Clickhouse\Common\Format;
 use Illuminate\Support\Traits\Macroable;
+use Tinderbox\ClickhouseBuilder\Exceptions\GrammarException;
 use Tinderbox\ClickhouseBuilder\Query\Grammar;
 use Tinderbox\ClickhouseBuilder\Query\BaseBuilder;
 use Bavix\LaravelClickHouse\Database\Connection;
@@ -133,11 +134,8 @@ class Builder extends BaseBuilder
         // Here, we will sort the insert keys for every record so that each insert is
         // in the same order for the record. We need to make sure this is the case
         // so there are not any errors or problems when inserting these records.
-        else {
-            foreach ($values as $key => $value) {
-                ksort($value);
-                $values[$key] = $value;
-            }
+        foreach ($values as $key => &$value) {
+            ksort($value);
         }
 
         return $this->connection->insert(
@@ -146,6 +144,9 @@ class Builder extends BaseBuilder
         );
     }
 
+    /**
+     * @return Connection
+     */
     public function getConnection(): Connection
     {
         return $this->connection;

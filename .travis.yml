@@ -6,6 +6,7 @@ php:
   - 'nightly'
 
 services:
+  - docker
   - memcached
 
 matrix:
@@ -13,6 +14,7 @@ matrix:
     - php: 'nightly'
 
 before_script:
+  - docker run -p 9000:9000 -p 8123:8123 -d --name clickhouse --ulimit nofile=262144:262144 yandex/clickhouse-server
   - pecl install pcov
   - phpenv config-rm xdebug.ini || echo "xdebug not available"
   - bash <(curl -s https://raw.githubusercontent.com/php-cache/cache/master/build/php/7.2/Memcached.sh)

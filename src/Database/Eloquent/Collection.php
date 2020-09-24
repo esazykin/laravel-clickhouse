@@ -14,7 +14,7 @@ class Collection extends \Illuminate\Database\Eloquent\Collection
      *
      * @param  mixed $key
      * @param  mixed $default
-     * @return \Illuminate\Database\Eloquent\Model|static
+     * @return Model|static
      */
     public function find($key, $default = null)
     {

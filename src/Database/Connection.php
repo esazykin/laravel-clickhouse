@@ -19,7 +19,7 @@ class Connection extends \Tinderbox\ClickhouseBuilder\Integrations\Laravel\Conne
     }
 
     /**
-     * @inheritDoc
+     * @return Pdo
      */
     public function getPdo()
     {

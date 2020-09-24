@@ -95,28 +95,37 @@ class BuilderTest extends TestCase
             $this->faker()->randomLetter => $this->faker()->randomDigit,
             $this->faker()->numerify('column_#') => $this->faker()->randomLetter,
         ];
-        $inserted = [$insertedRow];
-        ksort($insertedRow);
-        $values = collect($insertedRow)->values()->toArray();
 
+        \ksort($insertedRow);
+        $inserted = [$insertedRow];
         $generatedSql = sprintf(
-            'INSERT INTO `%s` (%s) FORMAT %s (\'%s\', %d, %d)',
+            'INSERT INTO `%s` (%s) FORMAT %s (%s)',
             $this->builder->getFrom()->getTable(),
             collect($insertedRow)
                 ->keys()
-                ->sort()
                 ->map(function (string $columnName) {
                     return sprintf('`%s`', $columnName);
                 })
                 ->implode(', '),
             Format::VALUES,
-            ...$values
+            collect($insertedRow)
+                ->values()
+                ->map(function ($value) {
+                    if (is_numeric($value)) {
+                        return $value;
+                    }
+
+                    return sprintf('\'%s\'', $value);
+                })
+                ->implode(', ')
         );
 
+        $values = collect($insertedRow)->values()->toArray();
         $this->connection
             ->shouldReceive('insert')
             ->withArgs([$generatedSql, $values])
-            ->andReturn(true);
+            ->andReturn(true)
+        ;
 
         self::assertTrue($this->builder->insert($inserted));
     }
