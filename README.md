@@ -19,11 +19,6 @@ Laravel Clickhouse - Eloquent model for ClickHouse.
 * **PHP Version**: 7.2+ 
 * **[Composer](https://getcomposer.org/):** `composer require bavix/laravel-clickhouse`
 
-
-## System requirements
-- php 7.2
-- clickhouse server
-
 ## Get started
 ```sh
 $ composer require bavix/laravel-clickhouse
