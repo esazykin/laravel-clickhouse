@@ -6,7 +6,7 @@
 Eloquent model for ClickHouse
 
 ## Prerequisites
-- php 7.1
+- php 7.2
 - clickhouse server
 
 ## Installation
@@ -97,3 +97,9 @@ Payment::select(raw('count() AS cnt'), 'payment_system')
 - Model::with() method
 - relations
 
+
+
+---
+Supported by
+
+[![Supported by JetBrains](https://cdn.rawgit.com/bavix/development-through/46475b4b/jetbrains.svg)](https://www.jetbrains.com/)
