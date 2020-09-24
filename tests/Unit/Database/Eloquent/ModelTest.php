@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Bavix\LaravelClickHouse\Tests\Unit\Database\Eloquent;
 
+use Bavix\LaravelClickHouse\Tests\EloquentModelCastingTest;
+use Bavix\LaravelClickHouse\Tests\EloquentModelTest;
+use Bavix\LaravelClickHouse\Tests\EloquentModelWithTest;
+use Bavix\LaravelClickHouse\Tests\Helpers;
+use Illuminate\Database\Eloquent\MassAssignmentException;
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\TestCase;
-use Bavix\LaravelClickHouse\Tests\Helpers;
-use Bavix\LaravelClickHouse\Tests\EloquentModelTest;
-use Illuminate\Database\Eloquent\MassAssignmentException;
-use Bavix\LaravelClickHouse\Tests\EloquentModelWithTest;
-use Bavix\LaravelClickHouse\Tests\EloquentModelCastingTest;
 
 class ModelTest extends TestCase
 {

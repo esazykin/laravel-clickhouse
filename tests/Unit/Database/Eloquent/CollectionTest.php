@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Bavix\LaravelClickHouse\Tests\Unit\Database\Eloquent;
 
-use Mockery\Mock;
-use Carbon\Carbon;
-use PHPUnit\Framework\TestCase;
-use Illuminate\Database\DatabaseManager;
-use Bavix\LaravelClickHouse\Tests\Helpers;
 use Bavix\LaravelClickHouse\Database\Connection;
 use Bavix\LaravelClickHouse\Database\Eloquent\Collection;
 use Bavix\LaravelClickHouse\Tests\EloquentModelCastingTest;
+use Bavix\LaravelClickHouse\Tests\Helpers;
+use Carbon\Carbon;
+use Illuminate\Database\DatabaseManager;
+use Mockery\Mock;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @property Mock|Connection connection
@@ -84,7 +84,7 @@ class CollectionTest extends TestCase
         $collection = EloquentModelCastingTest::all()
             ->map(function (EloquentModelCastingTest $model) use ($now) {
                 return [
-                    'id' => $model->id,
+                    'id'                => $model->id,
                     'datetimeAttribute' => $now,
                 ];
             });
@@ -101,6 +101,7 @@ class CollectionTest extends TestCase
 
     /**
      * @dataProvider findDataProvider
+     *
      * @param $key
      */
     public function testFind($key): void
@@ -126,6 +127,7 @@ class CollectionTest extends TestCase
 
     /**
      * @dataProvider containsDataProvider
+     *
      * @param bool $expected
      * @param $key
      * @param null $operator
@@ -156,7 +158,7 @@ class CollectionTest extends TestCase
         $connectionResult = collect()
             ->times(5, function (int $id) {
                 return [
-                    'id' => $id,
+                    'id'             => $id,
                     'floatAttribute' => (string) $this->faker()->randomFloat(2),
                 ];
             });
@@ -190,7 +192,7 @@ class CollectionTest extends TestCase
         return [
             [5],
             [
-                tap(new EloquentModelCastingTest, function (EloquentModelCastingTest $model) {
+                tap(new EloquentModelCastingTest(), function (EloquentModelCastingTest $model) {
                     $model->id = 5;
                 }),
             ],

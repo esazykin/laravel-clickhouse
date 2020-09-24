@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Bavix\LaravelClickHouse;
 
-use Illuminate\Database\DatabaseManager;
-use Illuminate\Support\ServiceProvider;
 use Bavix\LaravelClickHouse\Database\Connection;
 use Bavix\LaravelClickHouse\Database\Eloquent\Model;
+use Illuminate\Database\DatabaseManager;
+use Illuminate\Support\ServiceProvider;
 
 class ClickHouseServiceProvider extends ServiceProvider
 {
     /**
-     * @return void
      * @throws
+     *
+     * @return void
      */
     public function boot(): void
     {
