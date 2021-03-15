@@ -19,7 +19,7 @@ Laravel Clickhouse - Eloquent model for ClickHouse.
 * **PHP Version**: 7.2+
 * **[Composer](https://getcomposer.org/):** `composer require bavix/laravel-clickhouse`
 
-> :warning:If you are using php 8 and `the-tinderbox/clickhouse-*` author hasn't added support yet, then connect mine.
+> :warning: If you are using php 8 and `the-tinderbox/clickhouse-*` author hasn't added support yet, then connect mine.
 > 
 > composer req bavix/clickhouse-php-client
 > 
