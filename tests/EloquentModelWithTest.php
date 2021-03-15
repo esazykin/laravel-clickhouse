@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Bavix\LaravelClickHouse\Tests;
 
-use Mockery\MockInterface;
 use Bavix\LaravelClickHouse\Database\Eloquent\Builder;
+use Mockery\MockInterface;
 
 class EloquentModelWithTest extends EloquentModelTest
 {

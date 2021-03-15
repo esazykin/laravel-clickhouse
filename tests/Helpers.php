@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Bavix\LaravelClickHouse\Tests;
 
-use Mockery;
 use Faker\Factory;
 use Faker\Generator;
+use Mockery;
 
 trait Helpers
 {

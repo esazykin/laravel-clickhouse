@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Bavix\LaravelClickHouse\Tests\Unit\Database;
 
-use PHPUnit\Framework\TestCase;
 use Bavix\LaravelClickHouse\Database\Connection;
 use Bavix\LaravelClickHouse\Database\Query\Builder;
+use PHPUnit\Framework\TestCase;
 use Tinderbox\Clickhouse\Exceptions\ClientException;
 
 class ConnectionTest extends TestCase
 {
-
     /**
      * @var Connection
      */
@@ -24,8 +23,8 @@ class ConnectionTest extends TestCase
     {
         parent::setUp();
         $this->connection = new Connection([
-            'host' => 'localhost',
-            'port' => '8123',
+            'host'     => 'localhost',
+            'port'     => '8123',
             'database' => 'default',
         ]);
     }
@@ -39,8 +38,9 @@ class ConnectionTest extends TestCase
     }
 
     /**
-     * @return void
      * @throws ClientException
+     *
+     * @return void
      */
     public function testSystemEvents(): void
     {
@@ -52,8 +52,9 @@ class ConnectionTest extends TestCase
     }
 
     /**
-     * @return void
      * @throws ClientException
+     *
+     * @return void
      */
     public function testMyDatabase(): void
     {
@@ -82,8 +83,7 @@ ENGINE = TinyLog;');
         ];
         $this->connection->query()
             ->table('tests.dt')
-            ->insert($values)
-        ;
+            ->insert($values);
 
         self::assertEquals(3, $this->connection->query()->table('tests.dt')->count());
 

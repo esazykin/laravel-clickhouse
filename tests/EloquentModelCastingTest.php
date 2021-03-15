@@ -9,16 +9,16 @@ class EloquentModelCastingTest extends EloquentModelTest
     use Helpers;
 
     protected $casts = [
-        'intAttribute' => 'int',
-        'floatAttribute' => 'float',
-        'stringAttribute' => 'string',
-        'boolAttribute' => 'bool',
-        'booleanAttribute' => 'boolean',
-        'objectAttribute' => 'object',
-        'arrayAttribute' => 'array',
-        'jsonAttribute' => 'json',
-        'dateAttribute' => 'date',
-        'datetimeAttribute' => 'datetime',
+        'intAttribute'       => 'int',
+        'floatAttribute'     => 'float',
+        'stringAttribute'    => 'string',
+        'boolAttribute'      => 'bool',
+        'booleanAttribute'   => 'boolean',
+        'objectAttribute'    => 'object',
+        'arrayAttribute'     => 'array',
+        'jsonAttribute'      => 'json',
+        'dateAttribute'      => 'date',
+        'datetimeAttribute'  => 'datetime',
         'timestampAttribute' => 'timestamp',
     ];
 

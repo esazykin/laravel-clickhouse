@@ -12,8 +12,9 @@ class Collection extends \Illuminate\Database\Eloquent\Collection
     /**
      * Find a model in the collection by key.
      *
-     * @param  mixed $key
-     * @param  mixed $default
+     * @param mixed $key
+     * @param mixed $default
+     *
      * @return Model|static
      */
     public function find($key, $default = null)
@@ -24,7 +25,7 @@ class Collection extends \Illuminate\Database\Eloquent\Collection
 
         if (is_array($key)) {
             if ($this->isEmpty()) {
-                return new static;
+                return new static();
             }
 
             return $this->whereIn($this->first()->getKeyName(), $key);
@@ -38,9 +39,10 @@ class Collection extends \Illuminate\Database\Eloquent\Collection
     /**
      * Determine if a key exists in the collection.
      *
-     * @param  mixed $key
-     * @param  mixed $operator
-     * @param  mixed $value
+     * @param mixed $key
+     * @param mixed $operator
+     * @param mixed $value
+     *
      * @return bool
      */
     public function contains($key, $operator = null, $value = null): bool
@@ -57,7 +59,8 @@ class Collection extends \Illuminate\Database\Eloquent\Collection
     /**
      * Run a map over each of the items.
      *
-     * @param  callable $callback
+     * @param callable $callback
+     *
      * @return SupportCollection|static
      */
     public function map(callable $callback)
