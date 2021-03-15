@@ -5,8 +5,14 @@
 
 Eloquent model for ClickHouse
 
+> :warning:If you are using php 8 and `the-tinderbox/clickhouse-*` author hasn't added support yet, then connect mine.
+> 
+> composer req bavix/clickhouse-php-client
+> 
+> composer req bavix/clickhouse-builder
+
 ## Prerequisites
-- php 7.1
+- php 7.2
 - clickhouse server
 
 ## Installation
