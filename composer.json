@@ -1,5 +1,5 @@
 {
-  "name": "michaelWise/laravel-clickhouse",
+  "name": "michaelwise/laravel-clickhouse",
   "type": "library",
   "license": "MIT",
   "keywords": [
@@ -10,7 +10,7 @@
   "require": {
     "php": "^7.2|^8.0",
     "laravel/framework": "^9.0",
-    "the-tinderbox/clickhouse-builder": "3.0@dev",
+    "the-tinderbox/clickhouse-builder": "3.0"
   },
   "require-dev": {
     "infection/infection": "~0.15",
