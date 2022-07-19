@@ -32,5 +32,7 @@
   },
   "scripts": {
     "test": "vendor/bin/phpunit --stop-on-failure tests/"
-  }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable" : true
 }
