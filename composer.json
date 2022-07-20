@@ -1,52 +1,52 @@
 {
-  "name": "michaelwise/laravel-clickhouse",
-  "type": "library",
-  "license": "MIT",
-  "keywords": [
-    "laravel",
-    "clickhouse",
-    "eloquent"
-  ],
-  "repositories": [
+    "name": "michaelwise/laravel-clickhouse",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "clickhouse",
+        "eloquent"
+    ],
+    "repositories": [
         {
-            "type":"package",
+            "type": "package",
             "package": {
                 "name": "michaelwise/clickhouse-builder",
-                "version":"master",
+                "version": "master",
                 "source": {
                     "url": "https://github.com/MichaelWise/clickhouse-builder.git",
                     "type": "git",
-                    "reference":"master"
+                    "reference": "master"
                 }
             }
         }
-  ],
-  "require": {
-    "php": "^7.2|^8.0",
-    "laravel/framework": "^9.0",
-    "michaelwise/clickhouse-builder": "master"
-  },
-  "require-dev": {
-    "infection/infection": "~0.15",
-    "phpunit/phpunit": "^8.0|^9.0",
-    "mockery/mockery": "^1.3",
-    "fakerphp/faker": "^1.9",
-    "bavix/clickhouse-php-client": "^3.0",
-    "bavix/clickhouse-builder": "^3.0"
-  },
-  "autoload": {
-    "psr-4": {
-      "Esazykin\\LaravelClickHouse\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Esazykin\\LaravelClickHouse\\Tests\\": "tests/"
-    }
-  },
-  "scripts": {
-    "test": "vendor/bin/phpunit --stop-on-failure tests/"
-  },
-  "minimum-stability": "dev",
-  "prefer-stable" : true
+    ],
+    "require": {
+        "php": "^7.2|^8.0",
+        "laravel/framework": "^9.0",
+        "michaelwise/clickhouse-builder": "master"
+    },
+    "require-dev": {
+        "infection/infection": "~0.15",
+        "phpunit/phpunit": "^8.0|^9.0",
+        "mockery/mockery": "^1.3",
+        "fakerphp/faker": "^1.9",
+        "bavix/clickhouse-php-client": "^3.0",
+        "bavix/clickhouse-builder": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Esazykin\\LaravelClickHouse\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Esazykin\\LaravelClickHouse\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit --stop-on-failure tests/"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
