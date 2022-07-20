@@ -7,10 +7,24 @@
     "clickhouse",
     "eloquent"
   ],
+  "repositories": [
+        {
+            "type":"package",
+            "package": {
+                "name": "michaelwise/clickhouse-builder",
+                "version":"master",
+                "source": {
+                    "url": "https://github.com/MichaelWise/clickhouse-builder.git",
+                    "type": "git",
+                    "reference":"master"
+                }
+            }
+        }
+  ],
   "require": {
     "php": "^7.2|^8.0",
     "laravel/framework": "^9.0",
-    "the-tinderbox/clickhouse-builder": "5.*"
+    "michaelwise/clickhouse-builder": "master"
   },
   "require-dev": {
     "infection/infection": "~0.15",
