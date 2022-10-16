@@ -15,7 +15,7 @@ Laravel Clickhouse - Eloquent model for ClickHouse.
 * **Vendor**: bavix
 * **Package**: Laravel Clickhouse
 * **Version**: [![Latest Stable Version](https://poser.pugx.org/bavix/laravel-clickhouse/v/stable)](https://packagist.org/packages/bavix/laravel-clickhouse)
-* **Laravel Version**: `6.x`, `7.x`, `8.x`
+* **Laravel Version**: `6.x`, `7.x`, `8.x`, `9.x`
 * **PHP Version**: 7.2+
 * **[Composer](https://getcomposer.org/):** `composer require bavix/laravel-clickhouse`
 
