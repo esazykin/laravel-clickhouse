@@ -11,7 +11,7 @@ Eloquent model for ClickHouse
 
 ## Installation
 ```sh
-$ composer require esazykin/laravel-clickhouse
+$ composer require michaelwise/laravel-clickhouse
 ```
 
 Then add the code above into your config/app.php file providers section
