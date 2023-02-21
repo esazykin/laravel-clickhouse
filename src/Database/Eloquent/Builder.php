@@ -143,7 +143,7 @@ class Builder
             $this->query->where(function (QueryBuilder $queryBuilder) use ($column) {
                 $eloquentBuilder = $this->model->newEloquentBuilder($queryBuilder);
                 $column($eloquentBuilder);
-            });
+            }, null, null, $boolean);
         } else {
             $this->query->where(...func_get_args());
         }
