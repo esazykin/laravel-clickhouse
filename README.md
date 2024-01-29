@@ -1,3 +1,7 @@
+We switched to the standard mysql/postgres interface from clickhouse. More details here: https://clickhouse.com/docs/en/interfaces/mysql
+
+---
+
 # Laravel Clickhouse
 
 [![Build Status](https://travis-ci.org/bavix/laravel-clickhouse.svg?branch=master)](https://travis-ci.org/bavix/laravel-clickhouse)
