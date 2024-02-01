@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Esazykin\LaravelClickHouse\Tests\Unit\Database\Eloquent;
+namespace Bavix\LaravelClickHouse\Tests\Unit\Database\Eloquent;
 
-use Mockery\Mock;
+use Bavix\LaravelClickHouse\Database\Connection;
+use Bavix\LaravelClickHouse\Database\Eloquent\Collection;
+use Bavix\LaravelClickHouse\Tests\EloquentModelCastingTest;
+use Bavix\LaravelClickHouse\Tests\Helpers;
 use Carbon\Carbon;
-use PHPUnit\Framework\TestCase;
 use Illuminate\Database\DatabaseManager;
-use Esazykin\LaravelClickHouse\Tests\Helpers;
-use Esazykin\LaravelClickHouse\Database\Connection;
-use Esazykin\LaravelClickHouse\Database\Eloquent\Collection;
-use Esazykin\LaravelClickHouse\Tests\EloquentModelCastingTest;
+use Mockery\Mock;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @property Mock|Connection connection
@@ -20,7 +20,7 @@ class CollectionTest extends TestCase
 {
     use Helpers;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -38,7 +38,7 @@ class CollectionTest extends TestCase
         EloquentModelCastingTest::setConnectionResolver($resolver);
     }
 
-    public function testMapModelToModel()
+    public function testMapModelToModel(): void
     {
         $connectionResult = collect()
             ->times(5, function (int $id) {
@@ -58,17 +58,17 @@ class CollectionTest extends TestCase
                 return $model;
             });
 
-        $this->assertInstanceOf(Collection::class, $models);
-        $this->assertCount($connectionResult->count(), $models);
+        self::assertInstanceOf(Collection::class, $models);
+        self::assertCount($connectionResult->count(), $models);
 
         $models->each(function (EloquentModelCastingTest $model, int $key) use ($now) {
-            $this->assertSame($key + 1, $model->id);
-            $this->assertInstanceOf(Carbon::class, $model->datetimeAttribute);
-            $this->assertSame($now->toDateTimeString(), $model->datetimeAttribute->toDateTimeString());
+            self::assertSame($key + 1, $model->id);
+            self::assertInstanceOf(Carbon::class, $model->datetimeAttribute);
+            self::assertSame($now->toDateTimeString(), $model->datetimeAttribute->toDateTimeString());
         });
     }
 
-    public function testMapModelToArray()
+    public function testMapModelToArray(): void
     {
         $connectionResult = collect()
             ->times(5, function (int $id) {
@@ -84,26 +84,27 @@ class CollectionTest extends TestCase
         $collection = EloquentModelCastingTest::all()
             ->map(function (EloquentModelCastingTest $model) use ($now) {
                 return [
-                    'id' => $model->id,
+                    'id'                => $model->id,
                     'datetimeAttribute' => $now,
                 ];
             });
 
-        $this->assertInstanceOf(\Illuminate\Support\Collection::class, $collection);
-        $this->assertCount($connectionResult->count(), $collection);
+        self::assertInstanceOf(\Illuminate\Support\Collection::class, $collection);
+        self::assertCount($connectionResult->count(), $collection);
 
         $collection->each(function (array $row, int $key) use ($now) {
-            $this->assertSame($key + 1, $row['id']);
-            $this->assertInstanceOf(Carbon::class, $row['datetimeAttribute']);
-            $this->assertSame($now->toDateTimeString(), $row['datetimeAttribute']->toDateTimeString());
+            self::assertSame($key + 1, $row['id']);
+            self::assertInstanceOf(Carbon::class, $row['datetimeAttribute']);
+            self::assertSame($now->toDateTimeString(), $row['datetimeAttribute']->toDateTimeString());
         });
     }
 
     /**
      * @dataProvider findDataProvider
+     *
      * @param $key
      */
-    public function testFind($key)
+    public function testFind($key): void
     {
         $connectionResult = collect()
             ->times(5, function (int $id) {
@@ -117,21 +118,22 @@ class CollectionTest extends TestCase
         $found = EloquentModelCastingTest::all()->find($key);
 
         if (is_array($key)) {
-            $this->assertInstanceOf(Collection::class, $found);
-            $this->assertCount(count($key), $found);
+            self::assertInstanceOf(Collection::class, $found);
+            self::assertCount(count($key), $found);
         } else {
-            $this->assertInstanceOf(EloquentModelCastingTest::class, $found);
+            self::assertInstanceOf(EloquentModelCastingTest::class, $found);
         }
     }
 
     /**
      * @dataProvider containsDataProvider
+     *
      * @param bool $expected
      * @param $key
      * @param null $operator
      * @param null $value
      */
-    public function testContains(bool $expected, $key, $operator = null, $value = null)
+    public function testContains(bool $expected, $key, $operator = null, $value = null): void
     {
         $connectionResult = collect()
             ->times(5, function (int $id) {
@@ -148,15 +150,15 @@ class CollectionTest extends TestCase
             $contains = EloquentModelCastingTest::all()->contains($key);
         }
 
-        $this->assertSame($expected, $contains);
+        self::assertSame($expected, $contains);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $connectionResult = collect()
             ->times(5, function (int $id) {
                 return [
-                    'id' => $id,
+                    'id'             => $id,
                     'floatAttribute' => (string) $this->faker()->randomFloat(2),
                 ];
             });
@@ -167,13 +169,13 @@ class CollectionTest extends TestCase
 
         $models = EloquentModelCastingTest::all();
 
-        $this->assertInstanceOf(Collection::class, $models);
-        $this->assertCount($connectionResult->count(), $models);
+        self::assertInstanceOf(Collection::class, $models);
+        self::assertCount($connectionResult->count(), $models);
         $models = $models->map(function (EloquentModelCastingTest $model) {
             return $model->toArray();
         });
 
-        $this->assertSame(
+        self::assertSame(
             $connectionResult
                 ->map(function (array $row) {
                     $row['floatAttribute'] = (float) $row['floatAttribute'];
@@ -190,7 +192,7 @@ class CollectionTest extends TestCase
         return [
             [5],
             [
-                tap(new EloquentModelCastingTest, function (EloquentModelCastingTest $model) {
+                tap(new EloquentModelCastingTest(), function (EloquentModelCastingTest $model) {
                     $model->id = 5;
                 }),
             ],

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Esazykin\LaravelClickHouse\Tests\Unit\Database\Query;
+namespace Bavix\LaravelClickHouse\Tests\Unit\Database\Query;
 
+use Bavix\LaravelClickHouse\Database\Connection;
+use Bavix\LaravelClickHouse\Database\Query\Builder;
+use Bavix\LaravelClickHouse\Tests\Helpers;
 use PHPUnit\Framework\TestCase;
-use Esazykin\LaravelClickHouse\Tests\Helpers;
-use Tinderbox\ClickhouseBuilder\Query\Grammar;
-use Esazykin\LaravelClickHouse\Database\Connection;
 use Tinderbox\ClickhouseBuilder\Query\Enums\Format;
-use Esazykin\LaravelClickHouse\Database\Query\Builder;
+use Tinderbox\ClickhouseBuilder\Query\Grammar;
 
 /**
  * @property \Mockery\MockInterface|Connection connection
@@ -19,7 +19,7 @@ class BuilderTest extends TestCase
 {
     use Helpers;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -41,8 +41,8 @@ class BuilderTest extends TestCase
 
         $builderResult = $this->builder->get();
 
-        $this->assertInstanceOf(\Illuminate\Support\Collection::class, $builderResult);
-        $this->assertSame($connectionResult, $builderResult->toArray());
+        self::assertInstanceOf(\Illuminate\Support\Collection::class, $builderResult);
+        self::assertSame($connectionResult, $builderResult->toArray());
     }
 
     public function testCount(): void
@@ -55,7 +55,7 @@ class BuilderTest extends TestCase
 
         $builderResult = $this->builder->count();
 
-        $this->assertCount($builderResult, $connectionResult);
+        self::assertCount($builderResult, $connectionResult);
     }
 
     public function testFirst(): void
@@ -68,12 +68,12 @@ class BuilderTest extends TestCase
 
         $builderResult = $this->builder->first();
 
-        $this->assertSame($connectionResult[0], $builderResult);
+        self::assertSame($connectionResult[0], $builderResult);
     }
 
     public function testNewQuery(): void
     {
-        $this->assertInstanceOf(Builder::class, $this->builder->newQuery());
+        self::assertInstanceOf(Builder::class, $this->builder->newQuery());
     }
 
     public function testInsertFiles(): void
@@ -83,42 +83,49 @@ class BuilderTest extends TestCase
             ->andReturn([]);
 
         $builderResult = $this->builder->insertFiles(['column_1', 'column_2'], []);
-        $this->assertSame([], $builderResult);
+        self::assertSame([], $builderResult);
     }
 
     public function testInsert(): void
     {
-        $this->assertFalse($this->builder->insert([]));
+        self::assertFalse($this->builder->insert([]));
 
         $insertedRow = [
-            $this->faker()->word => $this->faker()->randomDigit,
-            $this->faker()->randomLetter => $this->faker()->randomDigit,
+            $this->faker()->word                 => $this->faker()->randomDigit,
+            $this->faker()->randomLetter         => $this->faker()->randomDigit,
             $this->faker()->numerify('column_#') => $this->faker()->randomLetter,
         ];
-        $inserted = [$insertedRow];
 
+        \ksort($insertedRow);
+        $inserted = [$insertedRow];
         $generatedSql = sprintf(
-            'INSERT INTO `%s` (%s) FORMAT %s (?, ?, ?)',
+            'INSERT INTO `%s` (%s) FORMAT %s (%s)',
             $this->builder->getFrom()->getTable(),
             collect($insertedRow)
                 ->keys()
-                ->sort()
                 ->map(function (string $columnName) {
                     return sprintf('`%s`', $columnName);
                 })
                 ->implode(', '),
-            Format::VALUES
+            Format::VALUES,
+            collect($insertedRow)
+                ->values()
+                ->map(function ($value) {
+                    if (is_numeric($value)) {
+                        return $value;
+                    }
+
+                    return sprintf('\'%s\'', $value);
+                })
+                ->implode(', ')
         );
 
-        ksort($insertedRow);
+        $values = collect($insertedRow)->values()->toArray();
         $this->connection
             ->shouldReceive('insert')
-            ->withArgs([
-                $generatedSql,
-                collect($insertedRow)->values()->toArray(),
-            ])
+            ->withArgs([$generatedSql, $values])
             ->andReturn(true);
 
-        $this->assertTrue($this->builder->insert($inserted));
+        self::assertTrue($this->builder->insert($inserted));
     }
 }

@@ -1,28 +1,43 @@
-# laravel-clickhouse
-[![Build Status](https://travis-ci.org/esazykin/laravel-clickhouse.svg?branch=master)](https://travis-ci.org/esazykin/laravel-clickhouse)
-[![StyleCI](https://styleci.io/repos/112756298/shield?branch=master)](https://styleci.io/repos/112756298)
-[![Coverage Status](https://coveralls.io/repos/github/esazykin/laravel-clickhouse/badge.svg)](https://coveralls.io/github/esazykin/laravel-clickhouse)
+We switched to the standard mysql/postgres interface from clickhouse. More details here: https://clickhouse.com/docs/en/interfaces/mysql
 
-Eloquent model for ClickHouse
+---
 
-## Prerequisites
-- php 7.1
-- clickhouse server
+# Laravel Clickhouse
 
-## Installation
+[![Build Status](https://travis-ci.org/bavix/laravel-clickhouse.svg?branch=master)](https://travis-ci.org/bavix/laravel-clickhouse)
+[![StyleCI](https://styleci.io/repos/269384604/shield?branch=master)](https://styleci.io/repos/269384604)
+[![Coverage Status](https://coveralls.io/repos/github/bavix/laravel-clickhouse/badge.svg)](https://coveralls.io/github/bavix/laravel-clickhouse)
+
+[![Package Rank](https://phppackages.org/p/bavix/laravel-clickhouse/badge/rank.svg)](https://packagist.org/packages/bavix/laravel-clickhouse)
+[![Latest Stable Version](https://poser.pugx.org/bavix/laravel-clickhouse/v/stable)](https://packagist.org/packages/bavix/laravel-clickhouse)
+[![Latest Unstable Version](https://poser.pugx.org/bavix/laravel-clickhouse/v/unstable)](https://packagist.org/packages/bavix/laravel-clickhouse)
+[![License](https://poser.pugx.org/bavix/laravel-clickhouse/license)](https://packagist.org/packages/bavix/laravel-clickhouse)
+[![composer.lock](https://poser.pugx.org/bavix/laravel-clickhouse/composerlock)](https://packagist.org/packages/bavix/laravel-clickhouse)
+
+Laravel Clickhouse - Eloquent model for ClickHouse.
+
+* **Vendor**: bavix
+* **Package**: Laravel Clickhouse
+* **Version**: [![Latest Stable Version](https://poser.pugx.org/bavix/laravel-clickhouse/v/stable)](https://packagist.org/packages/bavix/laravel-clickhouse)
+* **Laravel Version**: `6.x`, `7.x`, `8.x`, `9.x`
+* **PHP Version**: 7.2+
+* **[Composer](https://getcomposer.org/):** `composer require bavix/laravel-clickhouse`
+
+## Get started
 ```sh
-$ composer require esazykin/laravel-clickhouse
+$ composer require bavix/laravel-clickhouse
 ```
 
 Then add the code above into your config/app.php file providers section
 ```php
-Esazykin\LaravelClickHouse\ClickHouseServiceProvider::class,
+Bavix\LaravelClickHouse\ClickHouseServiceProvider::class,
 ```
+
 And add new connection into your config/database.php file. Something like this:
 ```php
 'connections' => [
-    'clickhouse' => [
-        'driver' => 'clickhouse',
+    'bavix::clickhouse' => [
+        'driver' => 'bavix::clickhouse',
         'host' => '',
         'port' => '',
         'database' => '',
@@ -35,14 +50,15 @@ And add new connection into your config/database.php file. Something like this:
     ]
 ]
 ```
+
 Or like this, if clickhouse runs in cluster
 ```php
 'connections' => [
-    'clickhouse' => [
-        'driver' => 'clickhouse',
-        'cluster' => [
-            'server-1' => [
-                'host' => '',
+    'bavix::clickhouse' => [
+        'driver' => 'bavix::clickhouse',
+        'servers' => [
+            [
+                'host' => 'ch-00.domain.com',
                 'port' => '',
                 'database' => '',
                 'username' => '',
@@ -52,8 +68,8 @@ Or like this, if clickhouse runs in cluster
                     'protocol' => 'https'
                 ]
             ],
-            'server-2' => [
-                'host' => '',
+            [
+                'host' => 'ch-01.domain.com',
                 'port' => '',
                 'database' => '',
                 'username' => '',
@@ -65,14 +81,14 @@ Or like this, if clickhouse runs in cluster
             ]
         ]
     ]
-]
+],
 ```
 
 Then create model
 ```php
 <?php
 
-use Esazykin\LaravelClickHouse\Database\Eloquent\Model;
+use Bavix\LaravelClickHouse\Database\Eloquent\Model;
 
 class Payment extends Model
 {
@@ -92,8 +108,7 @@ Payment::select(raw('count() AS cnt'), 'payment_system')
 
 ```
 
-## Roadmap
-- more tests
-- Model::with() method
-- relations
+---
+Supported by
 
+[![Supported by JetBrains](https://cdn.rawgit.com/bavix/development-through/46475b4b/jetbrains.svg)](https://www.jetbrains.com/)

@@ -1,5 +1,6 @@
 {
-  "name": "esazykin/laravel-clickhouse",
+  "name": "bavix/laravel-clickhouse",
+  "description": "Eloquent model for ClickHouse",
   "type": "library",
   "license": "MIT",
   "keywords": [
@@ -8,23 +9,34 @@
     "eloquent"
   ],
   "require": {
-    "php": ">=7.1",
-    "laravel/framework": "5.5.*",
-    "esazykin/clickhouse-builder": "^1.1"
+    "php": "^7.2|^8.0",
+    "laravel/framework": "^6.0|^7.0|^8.0|^9.0|^10.0",
+    "the-tinderbox/clickhouse-builder": "^4.0|^5.0|^6.0",
+    "ext-json": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "^6.5",
-    "mockery/mockery": "^1.0",
-    "fzaninotto/faker": "^1.7"
+    "infection/infection": "~0.15",
+    "phpunit/phpunit": "^8.0|^9.0",
+    "mockery/mockery": "^1.3",
+    "fakerphp/faker": "^1.9",
+    "bavix/clickhouse-php-client": "^3.0",
+    "bavix/clickhouse-builder": "^4.0"
   },
   "autoload": {
     "psr-4": {
-      "Esazykin\\LaravelClickHouse\\": "src/"
+      "Bavix\\LaravelClickHouse\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Esazykin\\LaravelClickHouse\\Tests\\": "tests/"
+      "Bavix\\LaravelClickHouse\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Bavix\\LaravelClickHouse\\ClickHouseServiceProvider"
+      ]
     }
   },
   "scripts": {

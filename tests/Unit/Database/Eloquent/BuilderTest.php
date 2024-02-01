@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Esazykin\LaravelClickHouse\Tests\Unit\Database\Eloquent;
+namespace Bavix\LaravelClickHouse\Tests\Unit\Database\Eloquent;
 
+use Bavix\LaravelClickHouse\Database\Connection;
+use Bavix\LaravelClickHouse\Database\Eloquent\Builder;
+use Bavix\LaravelClickHouse\Database\Eloquent\Collection;
+use Bavix\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
+use Bavix\LaravelClickHouse\Tests\EloquentModelCastingTest;
+use Bavix\LaravelClickHouse\Tests\Helpers;
+use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Mockery\Mock;
 use PHPUnit\Framework\TestCase;
-use Illuminate\Database\DatabaseManager;
-use Tinderbox\ClickhouseBuilder\Query\Tuple;
-use Esazykin\LaravelClickHouse\Tests\Helpers;
+use Tinderbox\ClickhouseBuilder\Query\Enums\Operator;
 use Tinderbox\ClickhouseBuilder\Query\Grammar;
 use Tinderbox\ClickhouseBuilder\Query\Identifier;
-use Esazykin\LaravelClickHouse\Database\Connection;
-use Tinderbox\ClickhouseBuilder\Query\Enums\Operator;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Esazykin\LaravelClickHouse\Database\Eloquent\Builder;
-use Esazykin\LaravelClickHouse\Database\Eloquent\Collection;
-use Esazykin\LaravelClickHouse\Tests\EloquentModelCastingTest;
+use Tinderbox\ClickhouseBuilder\Query\Tuple;
 use Tinderbox\ClickhouseBuilder\Query\TwoElementsLogicExpression;
-use Esazykin\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
 
 /**
  * @property Mock|Connection connection
@@ -29,7 +29,7 @@ class BuilderTest extends TestCase
 {
     use Helpers;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -41,7 +41,7 @@ class BuilderTest extends TestCase
             ->setModel($this->model);
     }
 
-    public function testWhereKey()
+    public function testWhereKey(): void
     {
         $id = $this->faker()->numberBetween(1);
 
@@ -49,21 +49,21 @@ class BuilderTest extends TestCase
 
         $wheres = $this->builder->getQuery()->getWheres();
 
-        $this->assertCount(1, $wheres);
+        self::assertCount(1, $wheres);
         /** @var TwoElementsLogicExpression $expression */
         $expression = $wheres[0];
-        $this->assertInstanceOf(TwoElementsLogicExpression::class, $expression);
+        self::assertInstanceOf(TwoElementsLogicExpression::class, $expression);
         /** @var Identifier $first */
         $first = $expression->getFirstElement();
-        $this->assertInstanceOf(Identifier::class, $first);
-        $this->assertSame($this->model->getTable().'.'.$this->model->getKeyName(), (string) $first);
-        $this->assertSame($id, $expression->getSecondElement());
+        self::assertInstanceOf(Identifier::class, $first);
+        self::assertSame($this->model->getTable().'.'.$this->model->getKeyName(), (string) $first);
+        self::assertSame($id, $expression->getSecondElement());
         $operator = $expression->getOperator();
-        $this->assertInstanceOf(Operator::class, $operator);
-        $this->assertSame('=', $operator->getValue());
+        self::assertInstanceOf(Operator::class, $operator);
+        self::assertSame('=', $operator->getValue());
     }
 
-    public function testWhereKeyNot()
+    public function testWhereKeyNot(): void
     {
         $ids = range(1, 5);
 
@@ -71,44 +71,44 @@ class BuilderTest extends TestCase
 
         $wheres = $this->builder->getQuery()->getWheres();
 
-        $this->assertCount(1, $wheres);
+        self::assertCount(1, $wheres);
         /** @var TwoElementsLogicExpression $expression */
         $expression = $wheres[0];
-        $this->assertInstanceOf(TwoElementsLogicExpression::class, $expression);
+        self::assertInstanceOf(TwoElementsLogicExpression::class, $expression);
         /** @var Identifier $first */
         $first = $expression->getFirstElement();
-        $this->assertInstanceOf(Identifier::class, $first);
-        $this->assertSame($this->model->getTable().'.'.$this->model->getKeyName(), (string) $first);
+        self::assertInstanceOf(Identifier::class, $first);
+        self::assertSame($this->model->getTable().'.'.$this->model->getKeyName(), (string) $first);
         /** @var Tuple $second */
         $second = $expression->getSecondElement();
-        $this->assertSame($ids, $second->getElements());
+        self::assertSame($ids, $second->getElements());
         $operator = $expression->getOperator();
-        $this->assertInstanceOf(Operator::class, $operator);
-        $this->assertSame('NOT IN', $operator->getValue());
+        self::assertInstanceOf(Operator::class, $operator);
+        self::assertSame('NOT IN', $operator->getValue());
     }
 
-    public function testWhereSimple()
+    public function testWhereSimple(): void
     {
         $date = $this->faker()->date();
         $this->builder->where('date_column', '>', $date);
 
         $wheres = $this->builder->getQuery()->getWheres();
 
-        $this->assertCount(1, $wheres);
+        self::assertCount(1, $wheres);
         /** @var TwoElementsLogicExpression $expression */
         $expression = $wheres[0];
-        $this->assertInstanceOf(TwoElementsLogicExpression::class, $expression);
+        self::assertInstanceOf(TwoElementsLogicExpression::class, $expression);
         /** @var Identifier $first */
         $first = $expression->getFirstElement();
-        $this->assertInstanceOf(Identifier::class, $first);
-        $this->assertSame('date_column', (string) $first);
-        $this->assertSame($date, $expression->getSecondElement());
+        self::assertInstanceOf(Identifier::class, $first);
+        self::assertSame('date_column', (string) $first);
+        self::assertSame($date, $expression->getSecondElement());
         $operator = $expression->getOperator();
-        $this->assertInstanceOf(Operator::class, $operator);
-        $this->assertSame('>', $operator->getValue());
+        self::assertInstanceOf(Operator::class, $operator);
+        self::assertSame('>', $operator->getValue());
     }
 
-    public function testWhereClosure()
+    public function testWhereClosure(): void
     {
         /** @var Mock|DatabaseManager $resolver */
         $resolver = $this->mock(DatabaseManager::class);
@@ -125,10 +125,10 @@ class BuilderTest extends TestCase
 
         $sql = $this->builder->toSql();
 
-        $this->assertSame('SELECT * FROM `test_table` WHERE (`id` < 10 OR `id` = 15) AND `status` = 100', $sql);
+        self::assertSame('SELECT * FROM `test_table` WHERE (`id` < 10 OR `id` = 15) AND `status` = 100', $sql);
     }
 
-    public function testOrWhere()
+    public function testOrWhere(): void
     {
         $id = $this->faker()->numberBetween(1);
         $date = $this->faker()->date();
@@ -136,13 +136,13 @@ class BuilderTest extends TestCase
         $this->builder->orWhere('date_column', '>', $date);
 
         $sql = $this->builder->toSql();
-        $this->assertSame(
+        self::assertSame(
             'SELECT * FROM `test_table` WHERE `id` = '.$id.' OR `date_column` > \''.$date.'\'',
             $sql
         );
     }
 
-    public function testFind()
+    public function testFind(): void
     {
         $id = $this->faker()->numberBetween(1);
         $stringAttribute = $this->faker()->word;
@@ -159,12 +159,12 @@ class BuilderTest extends TestCase
 
         $model = $this->builder->find($id);
 
-        $this->assertInstanceOf(EloquentModelCastingTest::class, $model);
-        $this->assertSame($id, $model->id);
-        $this->assertSame($stringAttribute, $model->stringAttribute);
+        self::assertInstanceOf(EloquentModelCastingTest::class, $model);
+        self::assertSame($id, $model->id);
+        self::assertSame($stringAttribute, $model->stringAttribute);
     }
 
-    public function testFindMany()
+    public function testFindMany(): void
     {
         $ids = collect()->times(5);
 
@@ -184,11 +184,11 @@ class BuilderTest extends TestCase
 
         $models = $this->builder->findMany($ids->toArray());
 
-        $this->assertInstanceOf(Collection::class, $models);
-        $this->assertCount($ids->count(), $models);
+        self::assertInstanceOf(Collection::class, $models);
+        self::assertCount($ids->count(), $models);
     }
 
-    public function testFindOrFail()
+    public function testFindOrFail(): void
     {
         $this->expectException(ModelNotFoundException::class);
 
@@ -203,21 +203,21 @@ class BuilderTest extends TestCase
         $this->builder->findOrFail($this->faker()->numberBetween());
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $connectionResultRow = [
-            'id' => $this->faker()->randomDigit,
-            'intAttribute' => (string) $this->faker()->randomDigit,
-            'floatAttribute' => (string) $this->faker()->randomFloat(2),
-            'stringAttribute' => $this->faker()->randomDigit,
-            'boolAttribute' => 1,
+            'id'               => $this->faker()->randomDigit,
+            'intAttribute'     => (string) $this->faker()->randomDigit,
+            'floatAttribute'   => (string) $this->faker()->randomFloat(2),
+            'stringAttribute'  => $this->faker()->randomDigit,
+            'boolAttribute'    => 1,
             'booleanAttribute' => 1,
-            'objectAttribute' => json_encode([
+            'objectAttribute'  => json_encode([
                 $this->faker()->word => $this->faker()->randomLetter,
             ]),
-            'arrayAttribute' => json_encode(range(1, 5)),
-            'dateAttribute' => now()->toDateTimeString(),
-            'datetimeAttribute' => now()->toDateString(),
+            'arrayAttribute'     => json_encode(range(1, 5)),
+            'dateAttribute'      => now()->toDateTimeString(),
+            'datetimeAttribute'  => now()->toDateString(),
             'timestampAttribute' => now()->toDateString(),
         ];
         $connectionResultRow['jsonAttribute'] = json_encode($connectionResultRow['arrayAttribute']);
@@ -234,18 +234,18 @@ class BuilderTest extends TestCase
 
         $collection = $this->builder->get();
 
-        $this->assertInstanceOf(Collection::class, $collection);
-        $this->assertCount(1, $collection);
+        self::assertInstanceOf(Collection::class, $collection);
+        self::assertCount(1, $collection);
 
         $retrievedModel = $collection[0];
-        $this->assertSame($connectionResultRow['id'], $retrievedModel->id);
-        $this->assertSame((int) $connectionResultRow['intAttribute'], $retrievedModel->intAttribute);
-        $this->assertSame((float) $connectionResultRow['floatAttribute'], $retrievedModel->floatAttribute);
-        $this->assertSame((string) $connectionResultRow['stringAttribute'], $retrievedModel->stringAttribute);
-        $this->assertTrue($retrievedModel->boolAttribute);
-        $this->assertTrue($retrievedModel->booleanAttribute);
-        $this->assertEquals(json_decode($connectionResultRow['objectAttribute']), $retrievedModel->objectAttribute);
-        $this->assertSame(json_decode($connectionResultRow['arrayAttribute'], true), $retrievedModel->arrayAttribute);
-        $this->assertSame($connectionResultRow['arrayAttribute'], $retrievedModel->jsonAttribute);
+        self::assertSame($connectionResultRow['id'], $retrievedModel->id);
+        self::assertSame((int) $connectionResultRow['intAttribute'], $retrievedModel->intAttribute);
+        self::assertSame((float) $connectionResultRow['floatAttribute'], $retrievedModel->floatAttribute);
+        self::assertSame((string) $connectionResultRow['stringAttribute'], $retrievedModel->stringAttribute);
+        self::assertTrue($retrievedModel->boolAttribute);
+        self::assertTrue($retrievedModel->booleanAttribute);
+        self::assertEquals(json_decode($connectionResultRow['objectAttribute']), $retrievedModel->objectAttribute);
+        self::assertSame(json_decode($connectionResultRow['arrayAttribute'], true), $retrievedModel->arrayAttribute);
+        self::assertSame($connectionResultRow['arrayAttribute'], $retrievedModel->jsonAttribute);
     }
 }

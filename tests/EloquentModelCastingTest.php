@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Esazykin\LaravelClickHouse\Tests;
+namespace Bavix\LaravelClickHouse\Tests;
 
 class EloquentModelCastingTest extends EloquentModelTest
 {
     use Helpers;
 
     protected $casts = [
-        'intAttribute' => 'int',
-        'floatAttribute' => 'float',
-        'stringAttribute' => 'string',
-        'boolAttribute' => 'bool',
-        'booleanAttribute' => 'boolean',
-        'objectAttribute' => 'object',
-        'arrayAttribute' => 'array',
-        'jsonAttribute' => 'json',
-        'dateAttribute' => 'date',
-        'datetimeAttribute' => 'datetime',
+        'intAttribute'       => 'int',
+        'floatAttribute'     => 'float',
+        'stringAttribute'    => 'string',
+        'boolAttribute'      => 'bool',
+        'booleanAttribute'   => 'boolean',
+        'objectAttribute'    => 'object',
+        'arrayAttribute'     => 'array',
+        'jsonAttribute'      => 'json',
+        'dateAttribute'      => 'date',
+        'datetimeAttribute'  => 'datetime',
         'timestampAttribute' => 'timestamp',
     ];
 

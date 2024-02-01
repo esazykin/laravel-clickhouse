@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Esazykin\LaravelClickHouse\Database\Query;
+namespace Bavix\LaravelClickHouse\Database\Query;
 
+use Bavix\LaravelClickHouse\Database\Connection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Tinderbox\Clickhouse\Common\Format;
 use Illuminate\Support\Traits\Macroable;
-use Tinderbox\ClickhouseBuilder\Query\Grammar;
+use Tinderbox\Clickhouse\Common\Format;
 use Tinderbox\ClickhouseBuilder\Query\BaseBuilder;
-use Esazykin\LaravelClickHouse\Database\Connection;
+use Tinderbox\ClickhouseBuilder\Query\Grammar;
 
 class Builder extends BaseBuilder
 {
@@ -93,10 +93,10 @@ class Builder extends BaseBuilder
     /**
      * Insert in table data from files.
      *
-     * @param array $columns
-     * @param array $files
+     * @param array  $columns
+     * @param array  $files
      * @param string $format
-     * @param int $concurrency
+     * @param int    $concurrency
      *
      * @throws \Tinderbox\Clickhouse\Exceptions\ClientException
      *
@@ -133,11 +133,8 @@ class Builder extends BaseBuilder
         // Here, we will sort the insert keys for every record so that each insert is
         // in the same order for the record. We need to make sure this is the case
         // so there are not any errors or problems when inserting these records.
-        else {
-            foreach ($values as $key => $value) {
-                ksort($value);
-                $values[$key] = $value;
-            }
+        foreach ($values as $key => &$value) {
+            ksort($value);
         }
 
         return $this->connection->insert(
@@ -146,6 +143,9 @@ class Builder extends BaseBuilder
         );
     }
 
+    /**
+     * @return Connection
+     */
     public function getConnection(): Connection
     {
         return $this->connection;

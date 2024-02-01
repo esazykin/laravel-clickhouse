@@ -2,26 +2,35 @@
 
 declare(strict_types=1);
 
-namespace Esazykin\LaravelClickHouse;
+namespace Bavix\LaravelClickHouse;
 
-use Illuminate\Support\ServiceProvider;
+use Bavix\LaravelClickHouse\Database\Connection;
+use Bavix\LaravelClickHouse\Database\Eloquent\Model;
 use Illuminate\Database\DatabaseManager;
-use Esazykin\LaravelClickHouse\Database\Connection;
-use Esazykin\LaravelClickHouse\Database\Eloquent\Model;
+use Illuminate\Support\ServiceProvider;
 
 class ClickHouseServiceProvider extends ServiceProvider
 {
+    /**
+     * @throws
+     *
+     * @return void
+     */
     public function boot(): void
     {
-        /** @var DatabaseManager $db */
-        $db = $this->app->get('db');
+        Model::setConnectionResolver($this->app['db']);
+        Model::setEventDispatcher($this->app['events']);
+    }
 
-        $db->extend('clickhouse', function ($config, $name) {
-            $config['name'] = $name;
-
-            return new Connection($config);
+    /**
+     * @return void
+     */
+    public function register(): void
+    {
+        $this->app->resolving('db', static function (DatabaseManager $db) {
+            $db->extend('bavix::clickhouse', static function ($config, $name) {
+                return new Connection(\array_merge($config, \compact('name')));
+            });
         });
-
-        Model::setConnectionResolver($db);
     }
 }
