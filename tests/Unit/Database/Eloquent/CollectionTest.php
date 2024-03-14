@@ -195,7 +195,7 @@ class CollectionTest extends TestCase
         );
     }
 
-    public function findDataProvider(): array
+    public static function findDataProvider(): array
     {
         return [
             [5],
@@ -208,7 +208,7 @@ class CollectionTest extends TestCase
         ];
     }
 
-    public function containsDataProvider()
+    public static function containsDataProvider()
     {
         return [
             [true, 5],
