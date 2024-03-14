@@ -13,6 +13,7 @@ jobs:
     strategy:
       matrix:
         php-versions: [8.2, 8.3]
+        laravel-versions: [^10.0, ^11.0]
 
     services:
       clickhouse:
@@ -50,7 +51,7 @@ jobs:
 
       - name: Install dependencies
         id: composer-dependencies
-        run: composer install --prefer-dist --no-progress
+        run: composer req --dev laravel/framework:${{ matrix.laravel-versions }} -W || composer install
 
       - name: Check codeclimate
         id: codeclimate-check
