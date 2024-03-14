@@ -52,6 +52,12 @@ jobs:
       - name: Run ecs-fix
         run: composer ecs-fix
 
+      - name: Run rector-fix
+        run: composer rector-fix
+
+      - name: Run ecs-fix
+        run: composer ecs-fix
+
       - name: Run rector
         run: composer rector
 
