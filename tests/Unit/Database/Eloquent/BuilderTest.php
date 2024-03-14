@@ -153,7 +153,7 @@ class BuilderTest extends TestCase
     public function testFind(): void
     {
         $id = $this->faker()->numberBetween(1);
-        $stringAttribute = $this->faker()->word;
+        $stringAttribute = $this->faker()->word();
 
         $this->connection
             ->shouldReceive('getName')
@@ -221,7 +221,7 @@ class BuilderTest extends TestCase
             'boolAttribute'    => 1,
             'booleanAttribute' => 1,
             'objectAttribute'  => json_encode([
-                $this->faker()->word() => $this->faker()->randomLetter,
+                $this->faker()->word() => $this->faker()->randomLetter()
             ]),
             'arrayAttribute'     => json_encode(range(1, 5)),
             'dateAttribute'      => now()->toDateTimeString(),
