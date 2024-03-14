@@ -12,7 +12,9 @@ trait HasAttributes
 
     public function getDates(): array
     {
-        return $this->dates;
+        return property_exists($this, 'dates') && is_array($this->dates)
+            ? $this->dates
+            : [];
     }
 
     public function getCasts(): array

@@ -16,22 +16,16 @@ class ConnectionTest extends TestCase
      */
     protected $connection;
 
-    /**
-     * @return void
-     */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->connection = new Connection([
-            'host'     => 'localhost',
-            'port'     => '8123',
+            'host' => 'localhost',
+            'port' => '8123',
             'database' => 'default',
         ]);
     }
 
-    /**
-     * @return void
-     */
     public function testQuery(): void
     {
         self::assertInstanceOf(Builder::class, $this->connection->query());
@@ -39,22 +33,14 @@ class ConnectionTest extends TestCase
 
     /**
      * @throws ClientException
-     *
-     * @return void
      */
     public function testSystemEvents(): void
     {
-        self::assertIsNumeric(
-            $this->connection->query()
-                ->table('system.events')
-                ->count()
-        );
+        self::assertIsNumeric($this->connection->query()->table('system.events')->count());
     }
 
     /**
      * @throws ClientException
-     *
-     * @return void
      */
     public function testMyDatabase(): void
     {
@@ -77,9 +63,18 @@ ENGINE = TinyLog;');
         self::assertTrue($result);
 
         $values = [
-            ['timestamp' => '2019-01-01 00:00:00', 'event_id' => 1],
-            ['event_id' => 2, 'timestamp' => '2020-01-01 00:00:00'],
-            ['event_id' => 3, 'timestamp' => 1546300800],
+            [
+                'timestamp' => '2019-01-01 00:00:00',
+                'event_id' => 1,
+            ],
+            [
+                'event_id' => 2,
+                'timestamp' => '2020-01-01 00:00:00',
+            ],
+            [
+                'event_id' => 3,
+                'timestamp' => 1546300800,
+            ],
         ];
         $this->connection->query()
             ->table('tests.dt')
