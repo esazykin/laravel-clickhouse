@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0.1 - 2024-03-14
+
+### What's Changed
+
+* Update README.md
+
+**Full Changelog**: https://github.com/bavix/laravel-clickhouse/compare/3.0.0...3.0.1
+
 ## 3.0.0 - 2024-03-14
 
 ### What's Changed
