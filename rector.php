@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector;
 use Rector\Config\RectorConfig;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\SetList;
@@ -12,6 +13,10 @@ return static function (RectorConfig $config): void {
     $config->paths([
         __DIR__ . '/src',
         __DIR__ . '/tests',
+    ]);
+
+    $config->skip([
+        IssetOnPropertyObjectToPropertyExistsRector::class,
     ]);
 
     // Define what rule sets will be applied
