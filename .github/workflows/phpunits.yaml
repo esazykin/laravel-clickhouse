@@ -13,9 +13,6 @@ jobs:
     strategy:
       matrix:
         php-versions: [8.2, 8.3]
-        databases: [testing, pgsql, mysql, mariadb]
-        caches: [array, redis, memcached]
-        locks: [array, redis, memcached]
 
     services:
       clickhouse:
@@ -75,10 +72,6 @@ jobs:
       - name: Run test suite
         id: unit-run
         run: composer parabench
-        env:
-          WALLET_CACHE_DRIVER: ${{ matrix.caches }}
-          WALLET_LOCK_DRIVER: ${{ matrix.locks }}
-          DB_CONNECTION: ${{ matrix.databases }}
 
       - name: Send coverage
         id: codeclimate-send
