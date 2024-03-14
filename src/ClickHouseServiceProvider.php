@@ -15,8 +15,6 @@ class ClickHouseServiceProvider extends ServiceProvider
 {
     /**
      * @throws
-     *
-     * @return void
      */
     public function boot(): void
     {
@@ -24,15 +22,14 @@ class ClickHouseServiceProvider extends ServiceProvider
         Model::setEventDispatcher($this->app['events']);
     }
 
-    /**
-     * @return void
-     */
     public function register(): void
     {
         $this->app->singleton(PdoInterface::class, Pdo::class);
         $this->app->resolving('db', static function (DatabaseManager $db) {
             $db->extend('bavix::clickhouse', static function ($config, $name) {
-                return new Connection(\array_merge($config, \compact('name')));
+                return new Connection(\array_merge($config, [
+                    'name' => $name,
+                ]));
             });
         });
     }

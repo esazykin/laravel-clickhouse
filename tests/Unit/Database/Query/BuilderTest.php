@@ -25,6 +25,7 @@ class BuilderTest extends TestCase
      * @var MockInterface&Connection
      */
     private MockInterface $connection;
+
     private Builder $builder;
 
     protected function setUp(): void
@@ -32,16 +33,14 @@ class BuilderTest extends TestCase
         parent::setUp();
 
         $this->connection = $this->mock(Connection::class);
-        $this->builder = new Builder(
-            $this->connection,
-            new Grammar()
-        );
+        $this->builder = new Builder($this->connection, new Grammar());
         $this->builder->from($this->faker()->word());
     }
 
     public function testGet(): void
     {
-        $connectionResult = $this->faker()->shuffle(range(1, 5));
+        $connectionResult = $this->faker()
+            ->shuffle(range(1, 5));
 
         $this->connection
             ->shouldReceive('select')
@@ -59,7 +58,9 @@ class BuilderTest extends TestCase
 
         $this->connection
             ->shouldReceive('select')
-            ->andReturn([['count' => count($connectionResult)]]);
+            ->andReturn([[
+                'count' => count($connectionResult),
+            ]]);
 
         $builderResult = $this->builder->count();
 
@@ -68,7 +69,8 @@ class BuilderTest extends TestCase
 
     public function testFirst(): void
     {
-        $connectionResult = $this->faker()->shuffle(range(1, 5));
+        $connectionResult = $this->faker()
+            ->shuffle(range(1, 5));
 
         $this->connection
             ->shouldReceive('select')
@@ -99,16 +101,23 @@ class BuilderTest extends TestCase
         self::assertFalse($this->builder->insert([]));
 
         $insertedRow = [
-            $this->faker()->word()                 => $this->faker()->randomDigit(),
-            $this->faker()->randomLetter()         => $this->faker()->randomDigit(),
-            $this->faker()->numerify('column_#') => $this->faker()->randomLetter(),
+            $this->faker()
+                ->word() => $this->faker()
+                ->randomDigit(),
+            $this->faker()
+                ->randomLetter() => $this->faker()
+                ->randomDigit(),
+            $this->faker()
+                ->numerify('column_#') => $this->faker()
+                ->randomLetter(),
         ];
 
         \ksort($insertedRow);
         $inserted = [$insertedRow];
         $generatedSql = sprintf(
             'INSERT INTO `%s` (%s) FORMAT %s (%s)',
-            $this->builder->getFrom()->getTable(),
+            $this->builder->getFrom()
+                ->getTable(),
             collect($insertedRow)
                 ->keys()
                 ->map(function (string $columnName) {
@@ -128,7 +137,9 @@ class BuilderTest extends TestCase
                 ->implode(', ')
         );
 
-        $values = collect($insertedRow)->values()->toArray();
+        $values = collect($insertedRow)
+            ->values()
+            ->toArray();
         $this->connection
             ->shouldReceive('insert')
             ->withArgs([$generatedSql, $values])

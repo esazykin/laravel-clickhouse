@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Bavix\LaravelClickHouse\Tests\Unit\Database\Eloquent;
 
-use Bavix\LaravelClickHouse\Tests\BaseEloquentModelCasting;
 use Bavix\LaravelClickHouse\Tests\BaseEloquentModel;
+use Bavix\LaravelClickHouse\Tests\BaseEloquentModelCasting;
 use Bavix\LaravelClickHouse\Tests\BaseEloquentModelWith;
 use Bavix\LaravelClickHouse\Tests\Helpers;
 use Illuminate\Database\Eloquent\MassAssignmentException;
@@ -35,7 +35,11 @@ class ModelTest extends TestCase
     {
         $this->expectException(MassAssignmentException::class);
 
-        new BaseEloquentModel(['foo' => '1', 'bar' => 2, 'baz' => 3]);
+        new BaseEloquentModel([
+            'foo' => '1',
+            'bar' => 2,
+            'baz' => 3,
+        ]);
     }
 
     public function testDirtyOnCastOrDateAttributes(): void

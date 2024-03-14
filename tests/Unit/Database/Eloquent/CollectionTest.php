@@ -26,6 +26,7 @@ class CollectionTest extends TestCase
      * @var MockInterface&Connection
      */
     private MockInterface $connection;
+
     private Builder $builder;
 
     protected function setUp(): void
@@ -50,7 +51,9 @@ class CollectionTest extends TestCase
     {
         $connectionResult = collect()
             ->times(5, function (int $id) {
-                return ['id' => $id];
+                return [
+                    'id' => $id,
+                ];
             });
 
         $this->connection
@@ -80,7 +83,9 @@ class CollectionTest extends TestCase
     {
         $connectionResult = collect()
             ->times(5, function (int $id) {
-                return ['id' => $id];
+                return [
+                    'id' => $id,
+                ];
             });
 
         $this->connection
@@ -92,7 +97,7 @@ class CollectionTest extends TestCase
         $collection = BaseEloquentModelCasting::all()
             ->map(function (BaseEloquentModelCasting $model) use ($now) {
                 return [
-                    'id'                => $model->id,
+                    'id' => $model->id,
                     'datetimeAttribute' => $now,
                 ];
             });
@@ -107,16 +112,14 @@ class CollectionTest extends TestCase
         });
     }
 
-    /**
-     * @dataProvider findDataProvider
-     *
-     * @param $key
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('findDataProvider')]
     public function testFind($key): void
     {
         $connectionResult = collect()
             ->times(5, function (int $id) {
-                return ['id' => $id];
+                return [
+                    'id' => $id,
+                ];
             });
 
         $this->connection
@@ -134,18 +137,17 @@ class CollectionTest extends TestCase
     }
 
     /**
-     * @dataProvider containsDataProvider
-     *
-     * @param bool $expected
-     * @param $key
      * @param null $operator
      * @param null $value
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('containsDataProvider')]
     public function testContains(bool $expected, $key, $operator = null, $value = null): void
     {
         $connectionResult = collect()
             ->times(5, function (int $id) {
-                return ['id' => $id];
+                return [
+                    'id' => $id,
+                ];
             });
 
         $this->connection
@@ -166,8 +168,9 @@ class CollectionTest extends TestCase
         $connectionResult = collect()
             ->times(5, function (int $id) {
                 return [
-                    'id'             => $id,
-                    'floatAttribute' => (string) $this->faker()->randomFloat(2),
+                    'id' => $id,
+                    'floatAttribute' => (string) $this->faker()
+                        ->randomFloat(2),
                 ];
             });
 
@@ -199,22 +202,15 @@ class CollectionTest extends TestCase
     {
         return [
             [5],
-            [
-                tap(new BaseEloquentModelCasting(), function (BaseEloquentModelCasting $model) {
-                    $model->id = 5;
-                }),
-            ],
+            [tap(new BaseEloquentModelCasting(), function (BaseEloquentModelCasting $model) {
+                $model->id = 5;
+            }), ],
             [1, 5],
         ];
     }
 
     public static function containsDataProvider()
     {
-        return [
-            [true, 5],
-            [false, 6],
-            [true, 'id', '>=', 5],
-            [false, 'id', '>=', 6],
-        ];
+        return [[true, 5], [false, 6], [true, 'id', '>=', 5], [false, 'id', '>=', 6]];
     }
 }

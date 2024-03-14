@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Bavix\LaravelClickHouse\Database;
 
 use Bavix\LaravelClickHouse\Database\Query\Builder;
-use Bavix\LaravelClickHouse\Database\Query\Pdo;
 use Bavix\LaravelClickHouse\Database\Query\PdoInterface;
 use Tinderbox\ClickhouseBuilder\Query\Grammar;
 

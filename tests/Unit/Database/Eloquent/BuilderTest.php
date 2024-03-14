@@ -34,7 +34,9 @@ class BuilderTest extends TestCase
      * @var MockInterface&Connection
      */
     private MockInterface $connection;
+
     private Builder $builder;
+
     private BaseEloquentModelCasting $model;
 
     protected function setUp(): void
@@ -51,11 +53,13 @@ class BuilderTest extends TestCase
 
     public function testWhereKey(): void
     {
-        $id = $this->faker()->numberBetween(1);
+        $id = $this->faker()
+            ->numberBetween(1);
 
         $this->builder->whereKey($id);
 
-        $wheres = $this->builder->getQuery()->getWheres();
+        $wheres = $this->builder->getQuery()
+            ->getWheres();
 
         self::assertCount(1, $wheres);
         /** @var TwoElementsLogicExpression $expression */
@@ -77,7 +81,8 @@ class BuilderTest extends TestCase
 
         $this->builder->whereKeyNot($ids);
 
-        $wheres = $this->builder->getQuery()->getWheres();
+        $wheres = $this->builder->getQuery()
+            ->getWheres();
 
         self::assertCount(1, $wheres);
         /** @var TwoElementsLogicExpression $expression */
@@ -97,10 +102,12 @@ class BuilderTest extends TestCase
 
     public function testWhereSimple(): void
     {
-        $date = $this->faker()->date();
+        $date = $this->faker()
+            ->date();
         $this->builder->where('date_column', '>', $date);
 
-        $wheres = $this->builder->getQuery()->getWheres();
+        $wheres = $this->builder->getQuery()
+            ->getWheres();
 
         self::assertCount(1, $wheres);
         /** @var TwoElementsLogicExpression $expression */
@@ -138,22 +145,23 @@ class BuilderTest extends TestCase
 
     public function testOrWhere(): void
     {
-        $id = $this->faker()->numberBetween(1);
-        $date = $this->faker()->date();
+        $id = $this->faker()
+            ->numberBetween(1);
+        $date = $this->faker()
+            ->date();
         $this->builder->where('id', $id);
         $this->builder->orWhere('date_column', '>', $date);
 
         $sql = $this->builder->toSql();
-        self::assertSame(
-            'SELECT * FROM `test_table` WHERE `id` = '.$id.' OR `date_column` > \''.$date.'\'',
-            $sql
-        );
+        self::assertSame('SELECT * FROM `test_table` WHERE `id` = '.$id.' OR `date_column` > \''.$date.'\'', $sql);
     }
 
     public function testFind(): void
     {
-        $id = $this->faker()->numberBetween(1);
-        $stringAttribute = $this->faker()->word();
+        $id = $this->faker()
+            ->numberBetween(1);
+        $stringAttribute = $this->faker()
+            ->word();
 
         $this->connection
             ->shouldReceive('getName')
@@ -162,7 +170,10 @@ class BuilderTest extends TestCase
         $this->connection
             ->shouldReceive('select')
             ->andReturn([
-                ['id' => $id, 'stringAttribute' => $stringAttribute],
+                [
+                    'id' => $id,
+                    'stringAttribute' => $stringAttribute,
+                ],
             ]);
 
         $model = $this->builder->find($id);
@@ -174,7 +185,8 @@ class BuilderTest extends TestCase
 
     public function testFindMany(): void
     {
-        $ids = collect()->times(5);
+        $ids = collect()
+            ->times(5);
 
         $this->connection
             ->shouldReceive('getName')
@@ -182,13 +194,11 @@ class BuilderTest extends TestCase
 
         $this->connection
             ->shouldReceive('select')
-            ->andReturn(
-                $ids
-                    ->map(function ($id) {
-                        return ['id' => $id];
-                    })
-                    ->toArray()
-            );
+            ->andReturn($ids->map(function ($id) {
+                return [
+                    'id' => $id,
+                ];
+            })->toArray());
 
         $models = $this->builder->findMany($ids->toArray());
 
@@ -214,19 +224,28 @@ class BuilderTest extends TestCase
     public function testGet(): void
     {
         $connectionResultRow = [
-            'id'               => $this->faker()->randomDigit(),
-            'intAttribute'     => (string) $this->faker()->randomDigit(),
-            'floatAttribute'   => (string) $this->faker()->randomFloat(2),
-            'stringAttribute'  => $this->faker()->randomDigit(),
-            'boolAttribute'    => 1,
+            'id' => $this->faker()
+                ->randomDigit(),
+            'intAttribute' => (string) $this->faker()
+                ->randomDigit(),
+            'floatAttribute' => (string) $this->faker()
+                ->randomFloat(2),
+            'stringAttribute' => $this->faker()
+                ->randomDigit(),
+            'boolAttribute' => 1,
             'booleanAttribute' => 1,
-            'objectAttribute'  => json_encode([
-                $this->faker()->word() => $this->faker()->randomLetter()
+            'objectAttribute' => json_encode([
+                $this->faker()
+                    ->word() => $this->faker()
+                    ->randomLetter(),
             ]),
-            'arrayAttribute'     => json_encode(range(1, 5)),
-            'dateAttribute'      => now()->toDateTimeString(),
-            'datetimeAttribute'  => now()->toDateString(),
-            'timestampAttribute' => now()->toDateString(),
+            'arrayAttribute' => json_encode(range(1, 5)),
+            'dateAttribute' => now()
+                ->toDateTimeString(),
+            'datetimeAttribute' => now()
+                ->toDateString(),
+            'timestampAttribute' => now()
+                ->toDateString(),
         ];
         $connectionResultRow['jsonAttribute'] = json_encode($connectionResultRow['arrayAttribute']);
 
@@ -236,9 +255,7 @@ class BuilderTest extends TestCase
 
         $this->connection
             ->shouldReceive('select')
-            ->andReturn([
-                $connectionResultRow,
-            ]);
+            ->andReturn([$connectionResultRow]);
 
         $collection = $this->builder->get();
 
