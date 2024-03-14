@@ -99,8 +99,8 @@ class BuilderTest extends TestCase
         self::assertFalse($this->builder->insert([]));
 
         $insertedRow = [
-            $this->faker()->word()                 => $this->faker()->randomDigit,
-            $this->faker()->randomLetter         => $this->faker()->randomDigit,
+            $this->faker()->word()                 => $this->faker()->randomDigit(),
+            $this->faker()->randomLetter         => $this->faker()->randomDigit(),
             $this->faker()->numerify('column_#') => $this->faker()->randomLetter,
         ];
 

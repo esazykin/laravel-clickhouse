@@ -214,10 +214,10 @@ class BuilderTest extends TestCase
     public function testGet(): void
     {
         $connectionResultRow = [
-            'id'               => $this->faker()->randomDigit,
-            'intAttribute'     => (string) $this->faker()->randomDigit,
+            'id'               => $this->faker()->randomDigit(),
+            'intAttribute'     => (string) $this->faker()->randomDigit(),
             'floatAttribute'   => (string) $this->faker()->randomFloat(2),
-            'stringAttribute'  => $this->faker()->randomDigit,
+            'stringAttribute'  => $this->faker()->randomDigit(),
             'boolAttribute'    => 1,
             'booleanAttribute' => 1,
             'objectAttribute'  => json_encode([
