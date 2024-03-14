@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bavix\LaravelClickHouse\Tests;
 
-class EloquentModelCastingTest extends EloquentModelTest
+class BaseEloquentModelCasting extends BaseEloquentModel
 {
     use Helpers;
 

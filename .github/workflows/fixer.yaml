@@ -10,6 +10,14 @@ jobs:
   autofix:
     runs-on: ubuntu-latest
 
+    services:
+      clickhouse:
+        image: clickhouse/clickhouse-server
+        env:
+          CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+        ports:
+          - 8123:8123
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4

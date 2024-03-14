@@ -8,7 +8,7 @@ use Bavix\LaravelClickHouse\Database\Connection;
 use Bavix\LaravelClickHouse\Database\Eloquent\Builder;
 use Bavix\LaravelClickHouse\Database\Eloquent\Collection;
 use Bavix\LaravelClickHouse\Database\Query\Builder as QueryBuilder;
-use Bavix\LaravelClickHouse\Tests\EloquentModelCastingTest;
+use Bavix\LaravelClickHouse\Tests\BaseEloquentModelCasting;
 use Bavix\LaravelClickHouse\Tests\Helpers;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -24,7 +24,7 @@ use Tinderbox\ClickhouseBuilder\Query\TwoElementsLogicExpression;
 /**
  * @property Mock|Connection connection
  * @property Builder builder
- * @property EloquentModelCastingTest model
+ * @property BaseEloquentModelCasting model
  */
 class BuilderTest extends TestCase
 {
@@ -35,7 +35,7 @@ class BuilderTest extends TestCase
      */
     private MockInterface $connection;
     private Builder $builder;
-    private EloquentModelCastingTest $model;
+    private BaseEloquentModelCasting $model;
 
     protected function setUp(): void
     {
@@ -43,7 +43,7 @@ class BuilderTest extends TestCase
 
         $this->connection = $this->mock(Connection::class);
 
-        $this->model = new EloquentModelCastingTest();
+        $this->model = new BaseEloquentModelCasting();
 
         $this->builder = (new Builder(new QueryBuilder($this->connection, new Grammar())))
             ->setModel($this->model);
@@ -122,7 +122,7 @@ class BuilderTest extends TestCase
         $resolver = $this->mock(DatabaseManager::class);
         $resolver->shouldReceive('connection')
             ->andReturn($this->connection);
-        EloquentModelCastingTest::setConnectionResolver($resolver);
+        BaseEloquentModelCasting::setConnectionResolver($resolver);
 
         $this->builder
             ->where(function (Builder $query) {
@@ -167,7 +167,7 @@ class BuilderTest extends TestCase
 
         $model = $this->builder->find($id);
 
-        self::assertInstanceOf(EloquentModelCastingTest::class, $model);
+        self::assertInstanceOf(BaseEloquentModelCasting::class, $model);
         self::assertSame($id, $model->id);
         self::assertSame($stringAttribute, $model->stringAttribute);
     }

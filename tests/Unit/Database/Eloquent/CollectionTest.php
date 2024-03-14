@@ -7,7 +7,7 @@ namespace Bavix\LaravelClickHouse\Tests\Unit\Database\Eloquent;
 use Bavix\LaravelClickHouse\Database\Connection;
 use Bavix\LaravelClickHouse\Database\Eloquent\Collection;
 use Bavix\LaravelClickHouse\Database\Query\Builder;
-use Bavix\LaravelClickHouse\Tests\EloquentModelCastingTest;
+use Bavix\LaravelClickHouse\Tests\BaseEloquentModelCasting;
 use Bavix\LaravelClickHouse\Tests\Helpers;
 use Carbon\Carbon;
 use Illuminate\Database\DatabaseManager;
@@ -36,14 +36,14 @@ class CollectionTest extends TestCase
 
         $this->connection
             ->shouldReceive('getName')
-            ->andReturn((new EloquentModelCastingTest())->getConnectionName());
+            ->andReturn((new BaseEloquentModelCasting())->getConnectionName());
 
         /** @var Mock|DatabaseManager $resolver */
         $resolver = $this->mock(DatabaseManager::class);
         $resolver->shouldReceive('connection')
             ->andReturn($this->connection);
 
-        EloquentModelCastingTest::setConnectionResolver($resolver);
+        BaseEloquentModelCasting::setConnectionResolver($resolver);
     }
 
     public function testMapModelToModel(): void
@@ -59,8 +59,8 @@ class CollectionTest extends TestCase
 
         $now = now();
 
-        $models = EloquentModelCastingTest::all()
-            ->map(function (EloquentModelCastingTest $model) use ($now) {
+        $models = BaseEloquentModelCasting::all()
+            ->map(function (BaseEloquentModelCasting $model) use ($now) {
                 $model->datetimeAttribute = $now;
 
                 return $model;
@@ -69,7 +69,7 @@ class CollectionTest extends TestCase
         self::assertInstanceOf(Collection::class, $models);
         self::assertCount($connectionResult->count(), $models);
 
-        $models->each(function (EloquentModelCastingTest $model, int $key) use ($now) {
+        $models->each(function (BaseEloquentModelCasting $model, int $key) use ($now) {
             self::assertSame($key + 1, $model->id);
             self::assertInstanceOf(Carbon::class, $model->datetimeAttribute);
             self::assertSame($now->toDateTimeString(), $model->datetimeAttribute->toDateTimeString());
@@ -89,8 +89,8 @@ class CollectionTest extends TestCase
 
         $now = now();
 
-        $collection = EloquentModelCastingTest::all()
-            ->map(function (EloquentModelCastingTest $model) use ($now) {
+        $collection = BaseEloquentModelCasting::all()
+            ->map(function (BaseEloquentModelCasting $model) use ($now) {
                 return [
                     'id'                => $model->id,
                     'datetimeAttribute' => $now,
@@ -123,13 +123,13 @@ class CollectionTest extends TestCase
             ->shouldReceive('select')
             ->andReturn($connectionResult->toArray());
 
-        $found = EloquentModelCastingTest::all()->find($key);
+        $found = BaseEloquentModelCasting::all()->find($key);
 
         if (is_array($key)) {
             self::assertInstanceOf(Collection::class, $found);
             self::assertCount(count($key), $found);
         } else {
-            self::assertInstanceOf(EloquentModelCastingTest::class, $found);
+            self::assertInstanceOf(BaseEloquentModelCasting::class, $found);
         }
     }
 
@@ -153,9 +153,9 @@ class CollectionTest extends TestCase
             ->andReturn($connectionResult->toArray());
 
         if ($operator !== null && $value !== null) {
-            $contains = EloquentModelCastingTest::all()->contains($key, $operator, $value);
+            $contains = BaseEloquentModelCasting::all()->contains($key, $operator, $value);
         } else {
-            $contains = EloquentModelCastingTest::all()->contains($key);
+            $contains = BaseEloquentModelCasting::all()->contains($key);
         }
 
         self::assertSame($expected, $contains);
@@ -175,11 +175,11 @@ class CollectionTest extends TestCase
             ->shouldReceive('select')
             ->andReturn($connectionResult->toArray());
 
-        $models = EloquentModelCastingTest::all();
+        $models = BaseEloquentModelCasting::all();
 
         self::assertInstanceOf(Collection::class, $models);
         self::assertCount($connectionResult->count(), $models);
-        $models = $models->map(function (EloquentModelCastingTest $model) {
+        $models = $models->map(function (BaseEloquentModelCasting $model) {
             return $model->toArray();
         });
 
@@ -200,7 +200,7 @@ class CollectionTest extends TestCase
         return [
             [5],
             [
-                tap(new EloquentModelCastingTest(), function (EloquentModelCastingTest $model) {
+                tap(new BaseEloquentModelCasting(), function (BaseEloquentModelCasting $model) {
                     $model->id = 5;
                 }),
             ],
