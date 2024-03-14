@@ -18,67 +18,12 @@ jobs:
         locks: [array, redis, memcached]
 
     services:
-      redis:
-        image: redis
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
-        ports:
-          - 6379:6379
-
-      memcached:
-        image: memcached
-        options: >-
-          --health-cmd "timeout 5 bash -c 'cat < /dev/null > /dev/udp/127.0.0.1/11211'"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
-        ports:
-          - 11211:11211
-
-      pgsql:
-        image: postgres
+      clickhouse:
+        image: clickhouse/clickhouse-server
         env:
-          POSTGRES_USER: root
-          POSTGRES_PASSWORD: wallet
-          POSTGRES_DB: wallet
-          POSTGRES_INITDB_ARGS: '--encoding=UTF-8 --lc-collate=C --lc-ctype=C'
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
+          CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
         ports:
-          - 5432:5432
-
-      mysql:
-        image: bitnami/mysql:8.0
-        env:
-          MYSQL_AUTHENTICATION_PLUGIN: mysql_native_password
-          MYSQL_ROOT_PASSWORD: wallet
-          MYSQL_DATABASE: wallet
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
-        ports:
-          - 3306:3306
-
-      mariadb:
-        image: mariadb:10.10
-        env:
-          MYSQL_ROOT_PASSWORD: wallet
-          MYSQL_DATABASE: wallet
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
-        ports:
-          - 3307:3306
+          - 8123:8123
 
     steps:
       - name: Checkout
