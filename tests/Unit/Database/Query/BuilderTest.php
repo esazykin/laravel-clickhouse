@@ -36,7 +36,7 @@ class BuilderTest extends TestCase
             $this->connection,
             new Grammar()
         );
-        $this->builder->from($this->faker()->word);
+        $this->builder->from($this->faker()->word());
     }
 
     public function testGet(): void
@@ -99,7 +99,7 @@ class BuilderTest extends TestCase
         self::assertFalse($this->builder->insert([]));
 
         $insertedRow = [
-            $this->faker()->word                 => $this->faker()->randomDigit,
+            $this->faker()->word()                 => $this->faker()->randomDigit,
             $this->faker()->randomLetter         => $this->faker()->randomDigit,
             $this->faker()->numerify('column_#') => $this->faker()->randomLetter,
         ];

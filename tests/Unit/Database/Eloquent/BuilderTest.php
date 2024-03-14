@@ -221,7 +221,7 @@ class BuilderTest extends TestCase
             'boolAttribute'    => 1,
             'booleanAttribute' => 1,
             'objectAttribute'  => json_encode([
-                $this->faker()->word => $this->faker()->randomLetter,
+                $this->faker()->word() => $this->faker()->randomLetter,
             ]),
             'arrayAttribute'     => json_encode(range(1, 5)),
             'dateAttribute'      => now()->toDateTimeString(),
