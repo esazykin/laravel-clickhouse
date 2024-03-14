@@ -13,6 +13,7 @@ use Bavix\LaravelClickHouse\Tests\Helpers;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Mockery\Mock;
+use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Tinderbox\ClickhouseBuilder\Query\Enums\Operator;
 use Tinderbox\ClickhouseBuilder\Query\Grammar;
@@ -28,6 +29,13 @@ use Tinderbox\ClickhouseBuilder\Query\TwoElementsLogicExpression;
 class BuilderTest extends TestCase
 {
     use Helpers;
+
+    /**
+     * @var MockInterface&Connection
+     */
+    private MockInterface $connection;
+    private Builder $builder;
+    private EloquentModelCastingTest $model;
 
     protected function setUp(): void
     {

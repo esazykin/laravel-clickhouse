@@ -6,6 +6,7 @@ namespace Bavix\LaravelClickHouse\Database;
 
 use Bavix\LaravelClickHouse\Database\Query\Builder;
 use Bavix\LaravelClickHouse\Database\Query\Pdo;
+use Bavix\LaravelClickHouse\Database\Query\PdoInterface;
 use Tinderbox\ClickhouseBuilder\Query\Grammar;
 
 class Connection extends \Tinderbox\ClickhouseBuilder\Integrations\Laravel\Connection
@@ -18,11 +19,8 @@ class Connection extends \Tinderbox\ClickhouseBuilder\Integrations\Laravel\Conne
         return new Builder($this, new Grammar());
     }
 
-    /**
-     * @return Pdo
-     */
-    public function getPdo()
+    public function getPdo(): PdoInterface
     {
-        return app(Pdo::class);
+        return app(PdoInterface::class);
     }
 }

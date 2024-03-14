@@ -7,6 +7,8 @@ namespace Bavix\LaravelClickHouse\Tests\Unit\Database\Query;
 use Bavix\LaravelClickHouse\Database\Connection;
 use Bavix\LaravelClickHouse\Database\Query\Builder;
 use Bavix\LaravelClickHouse\Tests\Helpers;
+use Illuminate\Support\Collection;
+use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Tinderbox\ClickhouseBuilder\Query\Enums\Format;
 use Tinderbox\ClickhouseBuilder\Query\Grammar;
@@ -18,6 +20,12 @@ use Tinderbox\ClickhouseBuilder\Query\Grammar;
 class BuilderTest extends TestCase
 {
     use Helpers;
+
+    /**
+     * @var MockInterface&Connection
+     */
+    private MockInterface $connection;
+    private Builder $builder;
 
     protected function setUp(): void
     {
@@ -41,7 +49,7 @@ class BuilderTest extends TestCase
 
         $builderResult = $this->builder->get();
 
-        self::assertInstanceOf(\Illuminate\Support\Collection::class, $builderResult);
+        self::assertInstanceOf(Collection::class, $builderResult);
         self::assertSame($connectionResult, $builderResult->toArray());
     }
 

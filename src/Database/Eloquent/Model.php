@@ -34,6 +34,13 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     use GuardsAttributes;
 
     /**
+     * Indicates if an exception should be thrown when trying to access a missing attribute on a retrieved model.
+     *
+     * @var bool
+     */
+    protected static $modelsShouldPreventAccessingMissingAttributes = false;
+
+    /**
      * The connection name for the model.
      *
      * @var string
@@ -720,5 +727,10 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     public static function __callStatic($method, $parameters)
     {
         return (new static())->$method(...$parameters);
+    }
+
+    public static function preventsAccessingMissingAttributes(): bool
+    {
+        return static::$modelsShouldPreventAccessingMissingAttributes;
     }
 }

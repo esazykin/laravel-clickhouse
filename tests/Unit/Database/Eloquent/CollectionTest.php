@@ -6,11 +6,13 @@ namespace Bavix\LaravelClickHouse\Tests\Unit\Database\Eloquent;
 
 use Bavix\LaravelClickHouse\Database\Connection;
 use Bavix\LaravelClickHouse\Database\Eloquent\Collection;
+use Bavix\LaravelClickHouse\Database\Query\Builder;
 use Bavix\LaravelClickHouse\Tests\EloquentModelCastingTest;
 use Bavix\LaravelClickHouse\Tests\Helpers;
 use Carbon\Carbon;
 use Illuminate\Database\DatabaseManager;
 use Mockery\Mock;
+use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -19,6 +21,12 @@ use PHPUnit\Framework\TestCase;
 class CollectionTest extends TestCase
 {
     use Helpers;
+
+    /**
+     * @var MockInterface&Connection
+     */
+    private MockInterface $connection;
+    private Builder $builder;
 
     protected function setUp(): void
     {
